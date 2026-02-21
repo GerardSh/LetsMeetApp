@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LetsMeetApp.Data.Models\LetsMeetApp.Data.Models.csproj" />
+    <ProjectReference Include="..\LetsMeetApp.Data\LetsMeetApp.Data.csproj" />
+    <ProjectReference Include="..\LetsMeetApp.ViewModels\LetsMeetApp.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -35,5 +35,14 @@ namespace LetsMeetApp.Data.Models
 
         [Comment("User's date of birth")]
         public DateTime BirthDate { get; set; }
+
+        public ICollection<Event> CreatedEvents { get; set; }
+            = new HashSet<Event>();
+
+        public ICollection<Category> CreatedCategories { get; set; }
+            = new HashSet<Category>();
+
+        public ICollection<EventParticipation> JoinedEvents { get; set; }
+            = new HashSet<EventParticipation>();
     }
 }

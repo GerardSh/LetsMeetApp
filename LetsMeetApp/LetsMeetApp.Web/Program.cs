@@ -2,6 +2,7 @@ using LetsMeetApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using LetsMeetApp.Data.Models;
+using LetsMeetApp.Web.Infrastructure.Extensions;
 
 namespace LetsMeetApp.Web
 {
@@ -43,6 +44,8 @@ namespace LetsMeetApp.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.ApplyMigrations(app.Logger);
 
             app.UseRouting();
 

@@ -6,17 +6,6 @@ namespace LetsMeetApp.Data.Models
     [Comment("Extended Identity user with application-specific properties")]
     public class ApplicationUser : IdentityUser<Guid>
     {
-        public ApplicationUser(string firstName,
-            string lastName,
-            string city,
-            DateTime birthDate)
-        {
-            Id = Guid.NewGuid();
-            FirstName = firstName;
-            LastName = lastName;
-            City = city;
-            BirthDate = birthDate;
-        }
 
         [Comment("First name of the user")]
         public string FirstName { get; set; } = null!;
@@ -30,8 +19,11 @@ namespace LetsMeetApp.Data.Models
         [Comment("Short description or bio")]
         public string? Bio { get; set; }
 
-        [Comment("City or location of the user")]
+        [Comment("City of the user")]
         public string City { get; set; } = null!;
+
+        [Comment("Country of the user")]
+        public string Country { get; set; } = null!;
 
         [Comment("User's date of birth")]
         public DateTime BirthDate { get; set; }

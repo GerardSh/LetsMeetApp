@@ -1,10 +1,11 @@
 using System.Diagnostics;
 using LetsMeet.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LetsMeet.Controllers
+namespace LetsMeetApp.Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -13,9 +14,23 @@ namespace LetsMeet.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
-            return View();
+            try
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    //return RedirectToAction(nameof(Index), "");
+                }
+
+                return View();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public IActionResult Privacy()

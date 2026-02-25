@@ -1,7 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -19,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using static LetsMeetApp.GCommon.ValidationConstants.ApplicationUser;
 
 namespace LetsMeetApp.Web.Areas.Identity.Pages.Account
 {
@@ -78,7 +77,7 @@ namespace LetsMeetApp.Web.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
-            public string Email { get; set; }
+            public string Email { get; set; } = null!;
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -88,7 +87,7 @@ namespace LetsMeetApp.Web.Areas.Identity.Pages.Account
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
-            public string Password { get; set; }
+            public string Password { get; set; } = null!;
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -97,9 +96,50 @@ namespace LetsMeetApp.Web.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-            public string ConfirmPassword { get; set; }
-        }
+            public string ConfirmPassword { get; set; } = null!;
 
+            [Required(ErrorMessage = "First name is required.")]
+            [MinLength(ApplicationUserFirstNameMinLength,
+               ErrorMessage = "First name must be at least {1} characters long.")]
+            [MaxLength(ApplicationUserFirstNameMaxLength,
+               ErrorMessage = "First name cannot exceed {1} characters.")]
+            public string FirstName { get; set; } = null!;
+
+            [Required(ErrorMessage = "Last name is required.")]
+            [MinLength(ApplicationUserLastNameMinLength,
+                ErrorMessage = "Last name must be at least {1} characters long.")]
+            [MaxLength(ApplicationUserLastNameMaxLength,
+                ErrorMessage = "Last name cannot exceed {1} characters.")]
+            public string LastName { get; set; } = null!;
+
+            [Url(ErrorMessage = "Avatar URL must be a valid URL.")]
+            [MaxLength(ApplicationUserAvatarUrlMaxLength,
+                ErrorMessage = "Avatar URL cannot exceed {1} characters.")]
+            public string? AvatarUrl { get; set; }
+
+            [MinLength(ApplicationUserBioMinLength,
+                ErrorMessage = "Bio must be at least {1} characters long.")]
+            [MaxLength(ApplicationUserBioMaxLength,
+                ErrorMessage = "Bio cannot exceed {1} characters.")]
+            public string? Bio { get; set; }
+
+            [Required(ErrorMessage = "City is required.")]
+            [MinLength(ApplicationUserCityMinLength,
+                ErrorMessage = "City must be at least {1} characters long.")]
+            [MaxLength(ApplicationUserCityMaxLength,
+                ErrorMessage = "City cannot exceed {1} characters.")]
+            public string City { get; set; } = null!;
+
+            [Required(ErrorMessage = "Country is required.")]
+            [MinLength(ApplicationUserCountryMinLength,
+                ErrorMessage = "Country must be at least {1} characters long.")]
+            [MaxLength(ApplicationUserCountryMaxLength,
+                ErrorMessage = "Country cannot exceed {1} characters.")]
+            public string Country { get; set; } = null!;
+
+            [DataType(DataType.Date)]
+            public DateTime BirthDate { get; set; }
+        }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -117,6 +157,16 @@ namespace LetsMeetApp.Web.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+                user.City = Input.City;
+                user.Country = Input.Country;
+                user.BirthDate = Input.BirthDate;
+
+                user.AvatarUrl = Input.AvatarUrl;
+                user.Bio = Input.Bio;
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -145,6 +195,7 @@ namespace LetsMeetApp.Web.Areas.Identity.Pages.Account
                         return LocalRedirect(returnUrl);
                     }
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);

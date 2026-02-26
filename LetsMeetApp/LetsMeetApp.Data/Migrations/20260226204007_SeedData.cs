@@ -16,7 +16,7 @@ namespace LetsMeetApp.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "AvatarUrl", "Bio", "BirthDate", "City", "ConcurrencyStamp", "Country", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("11111111-1111-1111-1111-111111111111"), 0, null, null, new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Sofia", "d63ba79c-82d8-49da-bab4-033d07555bfb", "Bulgaria", "admin@letsmeet.com", true, "Admin", "Admin", false, null, "ADMIN@LETSMEET.COM", "ADMIN@LETSMEET.COM", "AQAAAAIAAYagAAAAENBtA0G3IhsUa0Hrs45YlHhZJ+GwaFeALw0kFKwKdC9tq8AR4ur2cRx7tkIkNBroqg==", null, false, "ecff9c4e-28b0-4c48-9b5d-eba7a8fae6ce", false, "admin@letsmeet.com" });
+                values: new object[] { new Guid("11111111-1111-1111-1111-111111111111"), 0, null, null, new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Sofia", "10850671-ee81-40f1-837e-bf18bef9c0b5", "Bulgaria", "admin@letsmeet.com", true, "System", "Admin", false, null, "ADMIN@LETSMEET.COM", "ADMIN@LETSMEET.COM", "AQAAAAIAAYagAAAAEFSEH0Cf94mKE/j8ZHPDb7oaLF2tLT+53BFCrbqqNjzC2TlUeU7KKkLH5eFdWVbcEA==", null, false, "11111111-1111-1111-1111-111111111111", false, "admin@letsmeet.com" });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -33,11 +33,11 @@ namespace LetsMeetApp.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Events",
-                columns: new[] { "Id", "ApplicationUserId", "CategoryId", "City", "Country", "CreatorId", "Date", "Description", "ImageUrl", "Location", "Title" },
+                columns: new[] { "Id", "CategoryId", "City", "Country", "CreatorId", "Date", "Description", "ImageUrl", "Location", "Title" },
                 values: new object[,]
                 {
-                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), null, new Guid("22222222-2222-2222-2222-222222222222"), "Sofia", "Bulgaria", new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 2, 27, 21, 49, 39, 437, DateTimeKind.Utc).AddTicks(8025), "Join us for a live music session!", "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80", "Downtown Club", "Music Jam Session" },
-                    { new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), null, new Guid("11111111-1111-1111-1111-111111111111"), "Sofia", "Bulgaria", new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 1, 21, 49, 39, 437, DateTimeKind.Utc).AddTicks(8040), "Casual football match for all skill levels", "https://unsplash.com/photos/white-and-blue-soccer-ball-on-green-grass-field-OgqWLzWRSaI", "City Park Stadium", "Weekend Soccer" }
+                    { new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), new Guid("22222222-2222-2222-2222-222222222222"), "Sofia", "Bulgaria", new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 1, 20, 30, 0, 0, DateTimeKind.Local), "Join us for a live music session!", "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4", "Downtown Club", "Music Jam Session" },
+                    { new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), new Guid("11111111-1111-1111-1111-111111111111"), "Sofia", "Bulgaria", new Guid("11111111-1111-1111-1111-111111111111"), new DateTime(2026, 3, 3, 13, 0, 0, 0, DateTimeKind.Local), "Casual football match for all skill levels", "https://images.unsplash.com/photo-1486286701208-1d58e9338013", "City Park Stadium", "Weekend Soccer" }
                 });
 
             migrationBuilder.InsertData(
@@ -45,8 +45,8 @@ namespace LetsMeetApp.Data.Migrations
                 columns: new[] { "Id", "EventId", "JoinedAt", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("aaaaaaaa-1111-aaaa-1111-aaaaaaaaaaaa"), new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), new DateTime(2026, 2, 24, 21, 49, 39, 437, DateTimeKind.Utc).AddTicks(8072), new Guid("11111111-1111-1111-1111-111111111111") },
-                    { new Guid("bbbbbbbb-2222-bbbb-2222-bbbbbbbbbbbb"), new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), new DateTime(2026, 2, 24, 21, 49, 39, 437, DateTimeKind.Utc).AddTicks(8083), new Guid("11111111-1111-1111-1111-111111111111") }
+                    { new Guid("aaaaaaaa-1111-aaaa-1111-aaaaaaaaaaaa"), new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), new DateTime(2026, 2, 26, 20, 40, 6, 742, DateTimeKind.Utc).AddTicks(706), new Guid("11111111-1111-1111-1111-111111111111") },
+                    { new Guid("bbbbbbbb-2222-bbbb-2222-bbbbbbbbbbbb"), new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"), new DateTime(2026, 2, 26, 20, 40, 6, 742, DateTimeKind.Utc).AddTicks(711), new Guid("11111111-1111-1111-1111-111111111111") }
                 });
         }
 

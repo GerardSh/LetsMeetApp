@@ -36,7 +36,7 @@ namespace LetsMeetApp.Data.Configuration
                   .HasMaxLength(EventImageUrlMaxLength);
 
             entity.HasOne(e => e.Creator)
-                  .WithMany()
+                  .WithMany(u => u.CreatedEvents)
                   .HasForeignKey(e => e.CreatorId)
                   .OnDelete(DeleteBehavior.Restrict);
 
@@ -55,11 +55,11 @@ namespace LetsMeetApp.Data.Configuration
                     Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
                     Title = "Music Jam Session",
                     Description = "Join us for a live music session!",
-                    Date = DateTime.UtcNow.AddDays(3),
+                    Date = DateTime.Today.AddDays(3).AddHours(20).AddMinutes(30),
                     Location = "Downtown Club",
                     City = "Sofia",
                     Country = "Bulgaria",
-                    ImageUrl = "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80",
+                    ImageUrl = "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4",
                     CreatorId = new Guid("11111111-1111-1111-1111-111111111111"),
                     CategoryId = new Guid("22222222-2222-2222-2222-222222222222")
                 },
@@ -68,11 +68,11 @@ namespace LetsMeetApp.Data.Configuration
                     Id = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
                     Title = "Weekend Soccer",
                     Description = "Casual football match for all skill levels",
-                    Date = DateTime.UtcNow.AddDays(5),
+                    Date = DateTime.Today.AddDays(5).AddHours(13),
                     Location = "City Park Stadium",
                     City = "Sofia",
                     Country = "Bulgaria",
-                    ImageUrl = "https://unsplash.com/photos/white-and-blue-soccer-ball-on-green-grass-field-OgqWLzWRSaI",
+                    ImageUrl = "https://images.unsplash.com/photo-1486286701208-1d58e9338013",
                     CreatorId = new Guid("11111111-1111-1111-1111-111111111111"),
                     CategoryId = new Guid("11111111-1111-1111-1111-111111111111")
                 }

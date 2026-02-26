@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LetsMeetApp.Data.Migrations
 {
     [DbContext(typeof(LetsMeetDbContext))]
-    [Migration("20260224214940_SeedData")]
+    [Migration("20260226204007_SeedData")]
     partial class SeedData
     {
         /// <inheritdoc />
@@ -138,18 +138,18 @@ namespace LetsMeetApp.Data.Migrations
                             AccessFailedCount = 0,
                             BirthDate = new DateTime(1990, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             City = "Sofia",
-                            ConcurrencyStamp = "d63ba79c-82d8-49da-bab4-033d07555bfb",
+                            ConcurrencyStamp = "10850671-ee81-40f1-837e-bf18bef9c0b5",
                             Country = "Bulgaria",
                             Email = "admin@letsmeet.com",
                             EmailConfirmed = true,
-                            FirstName = "Admin",
+                            FirstName = "System",
                             LastName = "Admin",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LETSMEET.COM",
                             NormalizedUserName = "ADMIN@LETSMEET.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAENBtA0G3IhsUa0Hrs45YlHhZJ+GwaFeALw0kFKwKdC9tq8AR4ur2cRx7tkIkNBroqg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFSEH0Cf94mKE/j8ZHPDb7oaLF2tLT+53BFCrbqqNjzC2TlUeU7KKkLH5eFdWVbcEA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ecff9c4e-28b0-4c48-9b5d-eba7a8fae6ce",
+                            SecurityStamp = "11111111-1111-1111-1111-111111111111",
                             TwoFactorEnabled = false,
                             UserName = "admin@letsmeet.com"
                         });
@@ -220,9 +220,6 @@ namespace LetsMeetApp.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasComment("Primary key for the Event table");
 
-                    b.Property<Guid?>("ApplicationUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier")
                         .HasComment("Category of the event");
@@ -272,8 +269,6 @@ namespace LetsMeetApp.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("CreatorId");
@@ -288,9 +283,9 @@ namespace LetsMeetApp.Data.Migrations
                             City = "Sofia",
                             Country = "Bulgaria",
                             CreatorId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Date = new DateTime(2026, 2, 27, 21, 49, 39, 437, DateTimeKind.Utc).AddTicks(8025),
+                            Date = new DateTime(2026, 3, 1, 20, 30, 0, 0, DateTimeKind.Local),
                             Description = "Join us for a live music session!",
-                            ImageUrl = "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80",
+                            ImageUrl = "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4",
                             Location = "Downtown Club",
                             Title = "Music Jam Session"
                         },
@@ -301,9 +296,9 @@ namespace LetsMeetApp.Data.Migrations
                             City = "Sofia",
                             Country = "Bulgaria",
                             CreatorId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            Date = new DateTime(2026, 3, 1, 21, 49, 39, 437, DateTimeKind.Utc).AddTicks(8040),
+                            Date = new DateTime(2026, 3, 3, 13, 0, 0, 0, DateTimeKind.Local),
                             Description = "Casual football match for all skill levels",
-                            ImageUrl = "https://unsplash.com/photos/white-and-blue-soccer-ball-on-green-grass-field-OgqWLzWRSaI",
+                            ImageUrl = "https://images.unsplash.com/photo-1486286701208-1d58e9338013",
                             Location = "City Park Stadium",
                             Title = "Weekend Soccer"
                         });
@@ -342,14 +337,14 @@ namespace LetsMeetApp.Data.Migrations
                         {
                             Id = new Guid("aaaaaaaa-1111-aaaa-1111-aaaaaaaaaaaa"),
                             EventId = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-                            JoinedAt = new DateTime(2026, 2, 24, 21, 49, 39, 437, DateTimeKind.Utc).AddTicks(8072),
+                            JoinedAt = new DateTime(2026, 2, 26, 20, 40, 6, 742, DateTimeKind.Utc).AddTicks(706),
                             UserId = new Guid("11111111-1111-1111-1111-111111111111")
                         },
                         new
                         {
                             Id = new Guid("bbbbbbbb-2222-bbbb-2222-bbbbbbbbbbbb"),
                             EventId = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
-                            JoinedAt = new DateTime(2026, 2, 24, 21, 49, 39, 437, DateTimeKind.Utc).AddTicks(8083),
+                            JoinedAt = new DateTime(2026, 2, 26, 20, 40, 6, 742, DateTimeKind.Utc).AddTicks(711),
                             UserId = new Guid("11111111-1111-1111-1111-111111111111")
                         });
                 });
@@ -496,10 +491,6 @@ namespace LetsMeetApp.Data.Migrations
 
             modelBuilder.Entity("LetsMeetApp.Data.Models.Event", b =>
                 {
-                    b.HasOne("LetsMeetApp.Data.Models.ApplicationUser", null)
-                        .WithMany("CreatedEvents")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("LetsMeetApp.Data.Models.Category", "Category")
                         .WithMany("Events")
                         .HasForeignKey("CategoryId")
@@ -507,7 +498,7 @@ namespace LetsMeetApp.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("LetsMeetApp.Data.Models.ApplicationUser", "Creator")
-                        .WithMany()
+                        .WithMany("CreatedEvents")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();

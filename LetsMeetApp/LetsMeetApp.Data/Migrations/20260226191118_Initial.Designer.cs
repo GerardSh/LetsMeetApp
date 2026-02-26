@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LetsMeetApp.Data.Migrations
 {
     [DbContext(typeof(LetsMeetDbContext))]
-    [Migration("20260224211449_Initial")]
+    [Migration("20260226191118_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -165,9 +165,6 @@ namespace LetsMeetApp.Data.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasComment("Primary key for the Event table");
 
-                    b.Property<Guid?>("ApplicationUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier")
                         .HasComment("Category of the event");
@@ -216,8 +213,6 @@ namespace LetsMeetApp.Data.Migrations
                         .HasComment("Title of the event");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("CategoryId");
 
@@ -397,10 +392,6 @@ namespace LetsMeetApp.Data.Migrations
 
             modelBuilder.Entity("LetsMeetApp.Data.Models.Event", b =>
                 {
-                    b.HasOne("LetsMeetApp.Data.Models.ApplicationUser", null)
-                        .WithMany("CreatedEvents")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("LetsMeetApp.Data.Models.Category", "Category")
                         .WithMany("Events")
                         .HasForeignKey("CategoryId")
@@ -408,7 +399,7 @@ namespace LetsMeetApp.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("LetsMeetApp.Data.Models.ApplicationUser", "Creator")
-                        .WithMany()
+                        .WithMany("CreatedEvents")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();

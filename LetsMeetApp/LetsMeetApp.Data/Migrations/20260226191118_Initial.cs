@@ -195,17 +195,11 @@ namespace LetsMeetApp.Data.Migrations
                     Country = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false, comment: "Country of the event"),
                     ImageUrl = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true, comment: "URL to the event's image"),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Creator of the event"),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Category of the event"),
-                    ApplicationUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false, comment: "Category of the event")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Events", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Events_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Events_AspNetUsers_CreatorId",
                         column: x => x.CreatorId,
@@ -302,11 +296,6 @@ namespace LetsMeetApp.Data.Migrations
                 name: "IX_EventParticipations_UserId",
                 table: "EventParticipations",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Events_ApplicationUserId",
-                table: "Events",
-                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_CategoryId",

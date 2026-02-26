@@ -39,7 +39,7 @@ namespace LetsMeetApp.Data.Configuration
             var admin = new ApplicationUser
             {
                 Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                FirstName = "Admin",
+                FirstName = "System",
                 LastName = "Admin",
                 UserName = "admin@letsmeet.com",
                 NormalizedUserName = "ADMIN@LETSMEET.COM",
@@ -49,11 +49,9 @@ namespace LetsMeetApp.Data.Configuration
                 City = "Sofia",
                 Country = "Bulgaria",
                 BirthDate = new DateTime(1990, 1, 1),
-                SecurityStamp = Guid.NewGuid().ToString("D")
+                SecurityStamp = "11111111-1111-1111-1111-111111111111",
+                PasswordHash = "AQAAAAIAAYagAAAAEFSEH0Cf94mKE/j8ZHPDb7oaLF2tLT+53BFCrbqqNjzC2TlUeU7KKkLH5eFdWVbcEA=="
             };
-
-            var hasher = new PasswordHasher<ApplicationUser>();
-            admin.PasswordHash = hasher.HashPassword(admin, "Admin123!");
 
             builder.Entity<ApplicationUser>().HasData(admin);
         }

@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using LetsMeetApp.Data.Models;
 using LetsMeetApp.Web.Infrastructure.Extensions;
+using LetsMeetApp.Services.Core.Contracts;
+using LetsMeetApp.Services.Core;
 
 namespace LetsMeetApp.Web
 {
@@ -29,6 +31,8 @@ namespace LetsMeetApp.Web
             .AddDefaultTokenProviders()
             .AddDefaultUI();
 
+            builder.Services.AddScoped<IEventService, EventService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             builder.Services.AddControllersWithViews();
 

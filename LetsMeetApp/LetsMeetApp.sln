@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsMeetApp.Data.Models", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsMeetApp.Services.Core", "LetsMeetApp.Services.Core\LetsMeetApp.Services.Core.csproj", "{88815914-EFB8-7F39-EB0F-890C19A030A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsMeetApp.ViewModels", "LetsMeetApp.ViewModels\LetsMeetApp.ViewModels.csproj", "{DB392C04-7DB5-1A33-D2B5-6023B80A342E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsMeetApp.Web.ViewModels", "LetsMeetApp.ViewModels\LetsMeetApp.Web.ViewModels.csproj", "{DB392C04-7DB5-1A33-D2B5-6023B80A342E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LetsMeetApp.Web", "LetsMeetApp.Web\LetsMeetApp.Web.csproj", "{828AA044-86F6-E2FC-460E-0C24746BDF59}"
 EndProject

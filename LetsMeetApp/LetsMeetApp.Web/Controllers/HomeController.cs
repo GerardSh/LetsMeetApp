@@ -1,30 +1,30 @@
 using System.Diagnostics;
-using LetsMeet.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using LetsMeetApp.Web.ViewModels.Shared;
+
+
 namespace LetsMeetApp.Web.Controllers
 {
-    public class HomeController : BaseController
+    public class HomeController(ILogger<HomeController> logger,
+        LetsMeetApp.Services.Core.Contracts.IEventService eventService)
+        : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
 
         [AllowAnonymous]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             try
             {
-                if (User.Identity.IsAuthenticated)
+                if (User.Identity?.IsAuthenticated == true)
                 {
-                    //return RedirectToAction(nameof(Index), "");
+                    return RedirectToAction(nameof(Index), "Event");
                 }
 
-                return View();
+                var events = await eventService.GetDemoEventsAsync();
+
+                return View(events);
             }
             catch (Exception e)
             {

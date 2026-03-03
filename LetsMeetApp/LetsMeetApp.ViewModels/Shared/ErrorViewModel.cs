@@ -1,4 +1,4 @@
-namespace LetsMeet.Models
+namespace LetsMeetApp.Web.ViewModels.Shared
 {
     public class ErrorViewModel
     {

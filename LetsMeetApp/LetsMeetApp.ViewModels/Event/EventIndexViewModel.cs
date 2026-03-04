@@ -2,10 +2,10 @@
 {
     public class EventIndexViewModel
     {
-        public IEnumerable<EventViewModel> MyEvents { get; set; }
+        public IEnumerable<EventViewModel> MyEvents { get; set; } = null!;
 
-        public IEnumerable<EventViewModel> DiscoverEvents { get; set; }
+        public IEnumerable<EventViewModel> DiscoverEvents { get; set; } = null!;
 
-        public EventsFilterViewModel Filter { get; set; }
+        public EventsFilterViewModel Filter { get; set; } = null!;
     }
 }

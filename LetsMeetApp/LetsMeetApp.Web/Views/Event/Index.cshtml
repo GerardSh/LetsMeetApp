@@ -4,131 +4,235 @@
     ViewData["Title"] = "Events Dashboard";
 }
 
-<h2>My Events</h2>
+<h2 class="text-center fw-bold mb-4">My Events</h2>
 
 @if (!Model.MyEvents.Any())
 {
-    <p>You are not participating in any events yet.</p>
+    <div class="col-12 col-sm-6 col-lg-4 mb-3 d-flex">
+        <a asp-controller="Event"
+           asp-action="Create"
+           class="card h-100 w-100 shadow-sm text-decoration-none text-dark">
+
+            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+
+                <div class="display-1 fw-bold text-primary">
+                    +
+                </div>
+
+                <h5 class="mt-3">Create Your first Event</h5>
+
+            </div>
+
+        </a>
+    </div>
 }
 else
 {
-    <ul>
-        <div class="row justify-content-center">
-            @foreach (var ev in Model.MyEvents)
-            {
-                <div class="col-12 col-sm-6 col-lg-4 mb-3 d-flex">
-                    <div class="card h-100 w-100 shadow-sm">
+    <div class="row justify-content-center">
+        @foreach (var ev in Model.MyEvents)
+        {
+            <div class="col-12 col-sm-6 col-lg-4 mb-3 d-flex">
+                <div class="card h-100 w-100 shadow-sm">
 
-                        <img src="@(string.IsNullOrEmpty(ev.ImageUrl)
+                    <img src="@(string.IsNullOrEmpty(ev.ImageUrl)
                             ? Url.Content("~/images/no-image.png")
                             : ev.ImageUrl)"
-                             class="card-img-top img-fluid rounded"
-                             alt="@ev.Title"
-                             style="height:300px; object-fit:cover;" />
+                         class="card-img-top img-fluid rounded"
+                         alt="@ev.Title"
+                         style="height:300px; object-fit:cover;" />
 
-                        <div class="card-body d-flex flex-column">
+                    <div class="card-body d-flex flex-column">
 
-                            <h5 class="card-title">@ev.Title</h5>
+                        <h5 class="card-title">@ev.Title</h5>
 
-                            <p class="card-text flex-grow-1">
-                                @(ev.Description.Length > 100
-                                    ? ev.Description.Substring(0, 100) + "..."
-                                    : ev.Description)
-                            </p>
+                        <p class="card-text flex-grow-1">
+                            @(ev.Description.Length > 100
+                                ? ev.Description.Substring(0, 100) + "..."
+                                : ev.Description)
+                        </p>
 
-                            <p class="card-text">
-                                <small class="text-muted">
-                                    @ev.Date.ToString("dd MMM yyyy HH:mm")
-                                </small><br />
-                                <small class="text-muted">
-                                    @ev.City, @ev.Country
-                                </small><br />
-                                <small class="text-muted">
-                                    Category: @ev.CategoryName
-                                </small><br />
-                                <small class="text-muted">
-                                    By: @ev.CreatorFullName
-                                </small>
-                            </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                @ev.Date.ToString("dd MMM yyyy HH:mm")
+                            </small><br />
+                            <small class="text-muted">
+                                @ev.City, @ev.Country
+                            </small><br />
+                            <small class="text-muted">
+                                Category: @ev.CategoryName
+                            </small><br />
+                            <small class="text-muted">
+                                Participants: @ev.ParticipantsCount
+                            </small><br />
+                            <small class="text-muted">
+                                By: @ev.CreatorFullName
+                            </small>
+                        </p>
 
-                            <div class="mt-auto d-flex gap-2">
+                        <div class="mt-auto d-flex gap-2">
 
+                            <a asp-controller="Event"
+                               asp-action="Details"
+                               asp-route-id="@ev.Id"
+                               class="btn btn-primary flex-fill">
+                                View
+                            </a>
+
+                            @if (ev.IsCreator)
+                            {
                                 <a asp-controller="Event"
-                                   asp-action="Details"
+                                   asp-action="Edit"
                                    asp-route-id="@ev.Id"
-                                   class="btn btn-primary flex-fill">
-                                    View
+                                   class="btn btn-warning flex-fill">
+                                    Edit
                                 </a>
 
-                                @if (ev.IsCreator)
-                                {
-                                    <a asp-controller="Event"
-                                       asp-action="Edit"
-                                       asp-route-id="@ev.Id"
-                                       class="btn btn-warning flex-fill">
-                                        Edit
-                                    </a>
+                                <a asp-controller="Event"
+                                   asp-action="Delete"
+                                   asp-route-id="@ev.Id"
+                                   class="btn btn-danger flex-fill">
+                                    Delete
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-warning flex-fill" disabled>
+                                    Edit
+                                </button>
 
-                                    <a asp-controller="Event"
-                                       asp-action="Delete"
-                                       asp-route-id="@ev.Id"
-                                       class="btn btn-danger flex-fill">
-                                        Delete
-                                    </a>
-                                }
-                                else
-                                {
-                                    <button class="btn btn-warning flex-fill" disabled>
-                                        Edit
-                                    </button>
-
-                                    <button class="btn btn-danger flex-fill" disabled>
-                                        Delete
-                                    </button>
-                                }
-
-                            </div>
+                                <a asp-controller="EventParticipation"
+                                   asp-action="Leave"
+                                   asp-route-id="@ev.Id"
+                                   class="btn btn-danger flex-fill">
+                                    Leave
+                                </a>
+                            }
 
                         </div>
+
                     </div>
                 </div>
-            }
+            </div>
+        }
+
+        <div class="col-12 col-sm-6 col-lg-4 mb-3 d-flex">
+            <a asp-controller="Event"
+               asp-action="Create"
+               class="card h-100 w-100 shadow-sm text-decoration-none text-dark">
+
+                <div class="card-body d-flex flex-column justify-content-center align-items-center">
+
+                    <div class="display-1 fw-bold text-primary">
+                        +
+                    </div>
+
+                    <h5 class="mt-3">Create New Event</h5>
+
+                </div>
+
+            </a>
         </div>
-    </ul>
+    </div>
 }
 
 <hr />
 
-<h2>Discover Events</h2>
+<h2 class="text-center fw-bold mb-4">Discover Events</h2>
 
-<form method="get">
-    <label>
-        <input type="checkbox"
-               name="EventsNearMe"
-               value="true"
-        @(Model.Filter.EventsNearMe ? "checked" : "") />
-        Events Near Me
-    </label>
+<div class="d-flex justify-content-center my-3">
+    <form method="get" class="d-flex align-items-center gap-3">
+        <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="EventsNearMe"
+                   value="true"
+            @(Model.Filter.EventsNearMe ? "checked" : "") />
 
-    <button type="submit">Apply Filter</button>
-</form>
+            <label class="form-check-label">
+                Events Near Me
+            </label>
+        </div>
 
-<br />
+        <button type="submit" class="btn btn-outline-primary">
+            Apply Filter
+        </button>
+    </form>
+</div>
 
 @if (!Model.DiscoverEvents.Any())
 {
-    <p>No events found.</p>
+    <p class="text-center">No events found.</p>
 }
 else
 {
-    <ul>
+    <div class="row justify-content-center">
         @foreach (var ev in Model.DiscoverEvents)
         {
-            <li>
-                <strong>@ev.Title</strong> <br />
-                City: @ev.City <br />
-                Date: @ev.Date.ToString("dd MMM yyyy")
-            </li>
+            <div class="col-12 col-sm-6 col-lg-4 mb-3 d-flex">
+                <div class="card h-100 w-100 shadow-sm">
+
+                    <img src="@(string.IsNullOrEmpty(ev.ImageUrl)
+                            ? Url.Content("~/images/no-image.png")
+                            : ev.ImageUrl)"
+                         class="card-img-top img-fluid rounded"
+                         alt="@ev.Title"
+                         style="height:300px; object-fit:cover;" />
+
+                    <div class="card-body d-flex flex-column">
+
+                        <h5 class="card-title">@ev.Title</h5>
+
+                        <p class="card-text flex-grow-1">
+                            @(ev.Description.Length > 100
+                                ? ev.Description.Substring(0, 100) + "..."
+                                : ev.Description)
+                        </p>
+
+                        <p class="card-text">
+                            <small class="text-muted">
+                                @ev.Date.ToString("dd MMM yyyy HH:mm")
+                            </small><br />
+                            <small class="text-muted">
+                                @ev.City, @ev.Country
+                            </small><br />
+                            <small class="text-muted">
+                                Category: @ev.CategoryName
+                            </small><br />
+                            <small class="text-muted">
+                                Participants: @ev.ParticipantsCount
+                            </small><br />
+                            <small class="text-muted">
+                                By: @ev.CreatorFullName
+                            </small>
+                        </p>
+
+                        <div class="mt-auto d-flex gap-2">
+
+                            <a asp-controller="Event"
+                               asp-action="Details"
+                               asp-route-id="@ev.Id"
+                               class="btn btn-primary flex-fill">
+                                View
+                            </a>
+
+                            <button class="btn btn-warning flex-fill" disabled>
+                                Edit
+                            </button>
+
+                            <a asp-controller="EventParticipation"
+                               asp-action="Join"
+                               asp-route-id="@ev.Id"
+                               class="btn btn-danger flex-fill">
+                                Join Event
+                            </a>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         }
-    </ul>
+    </div>
+
+    <br />
 }

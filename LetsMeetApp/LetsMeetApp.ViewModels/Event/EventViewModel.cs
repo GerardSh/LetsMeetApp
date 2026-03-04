@@ -22,6 +22,8 @@
 
         public string CreatorFullName { get; set; } = null!;
 
+        public int ParticipantsCount { get; set; }
+
         public bool IsCreator { get; set; }
     }
 }

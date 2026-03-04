@@ -30,7 +30,8 @@ namespace LetsMeetApp.Services.Core
                                 Country = e.Country,
                                 ImageUrl = e.ImageUrl,
                                 CategoryName = e.Category.Name,
-                                CreatorFullName = $"{e.Creator.FirstName} {e.Creator.LastName}"
+                                CreatorFullName = $"{e.Creator.FirstName} {e.Creator.LastName}",
+                                ParticipantsCount = e.Participants.Count
                             })
                             .ToListAsync();
 
@@ -66,6 +67,7 @@ namespace LetsMeetApp.Services.Core
                     ImageUrl = e.ImageUrl,
                     CategoryName = e.Category.Name,
                     CreatorFullName = $"{e.Creator.FirstName} {e.Creator.LastName}",
+                    ParticipantsCount = e.Participants.Count,
                     IsCreator = e.CreatorId == userIdGuid
                 })
                 .OrderBy(e => e.Date)
@@ -106,6 +108,7 @@ namespace LetsMeetApp.Services.Core
                     ImageUrl = e.ImageUrl,
                     CategoryName = e.Category.Name,
                     CreatorFullName = $"{e.Creator.FirstName} {e.Creator.LastName}",
+                    ParticipantsCount = e.Participants.Count,
                     IsCreator = false
                 })
                 .OrderBy(e => e.Date)

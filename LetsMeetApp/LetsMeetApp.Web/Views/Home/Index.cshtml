@@ -8,11 +8,13 @@
     <h1>Welcome to LetsMeetApp!</h1>
     <p class="lead">
         Create and join events, meet people, and connect with others in your city.
-        @if (Model.Any())
-        {
-        <p class="lead">Check out some upcoming events below.</p>
-        }
     </p>
+
+    @if (Model.Any())
+    {
+        <p class="lead">Check out some upcoming events below.</p>
+    }
+
 </div>
 
 <div class="row justify-content-center">
@@ -36,6 +38,7 @@
                         <small class="text-muted">@ev.Date.ToString("dd MMM yyyy HH:mm")</small><br />
                         <small class="text-muted">@ev.City, @ev.Country</small><br />
                         <small class="text-muted">Category: @ev.CategoryName</small><br />
+                        <small class="text-muted">Participants: @ev.ParticipantsCount</small><br />
                         <small class="text-muted">By: @ev.CreatorFullName</small>
                     </p>
                     <a asp-controller="Event" asp-action="Details" asp-route-id="@ev.Id" class="btn btn-primary mt-auto">View Details</a>

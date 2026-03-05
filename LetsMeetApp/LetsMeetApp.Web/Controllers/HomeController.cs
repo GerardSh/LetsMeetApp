@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using LetsMeetApp.Web.ViewModels.Shared;
+using LetsMeetApp.Web.DemoData;
 
 
 namespace LetsMeetApp.Web.Controllers
@@ -22,9 +23,7 @@ namespace LetsMeetApp.Web.Controllers
                     return RedirectToAction(nameof(Index), "Event");
                 }
 
-                var events = await eventService.GetDemoEventsAsync();
-
-                return View(events);
+                return View(DemoEventsProvider.GetDemoEvents());
             }
             catch (Exception e)
             {

@@ -5,9 +5,9 @@ namespace LetsMeetApp.Services.Core.Contracts
 {
     public interface IEventService
     {
-        Task<IEnumerable<EventViewModel>> GetDemoEventsAsync();
-
         Task<EventIndexViewModel> GetIndexEventsAsync(string userId, EventsFilterViewModel filter);
+
+        Task<bool> CreateEventAsync(string userId, EventCreateInputModel inputModel);
 
         Task<Event?> GetByIdAsync(Guid id);
     }

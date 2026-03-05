@@ -47,7 +47,7 @@
 
             public const int EventImageUrlMaxLength = 250;
 
-            public const string EventDateOnFormat = "yyyy-MM-dd";
+            public const string EventDateFormat = "yyyy-MM-ddTHH:mm";
         }
     }
 }

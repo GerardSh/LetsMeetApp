@@ -4,7 +4,7 @@
     ViewData["Title"] = "Welcome";
 }
 
-<div class="text-center my-5">
+<div class="text-center my-3">
     <h1>Welcome to LetsMeetApp!</h1>
     <p class="lead">
         Create and join events, meet people, and connect with others in your city.
@@ -41,9 +41,29 @@
                         <small class="text-muted">Participants: @ev.ParticipantsCount</small><br />
                         <small class="text-muted">By: @ev.CreatorFullName</small>
                     </p>
-                    <a asp-controller="Event" asp-action="Details" asp-route-id="@ev.Id" class="btn btn-primary mt-auto">View Details</a>
                 </div>
             </div>
         </div>
     }
+</div>
+
+<div class="text-center my-3">
+    <h3>Want to create or join events?</h3>
+    <p class="lead">
+        Register now and start connecting with people around you.
+    </p>
+
+    <div class="d-flex justify-content-center gap-3 mt-3">
+        <a asp-area="Identity"
+           asp-page="/Account/Register"
+           class="btn btn-primary btn-lg">
+            Register
+        </a>
+
+        <a asp-area="Identity"
+           asp-page="/Account/Login"
+           class="btn btn-outline-primary btn-lg">
+            Login
+        </a>
+    </div>
 </div>

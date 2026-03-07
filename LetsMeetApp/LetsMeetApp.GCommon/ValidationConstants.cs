@@ -36,7 +36,7 @@
             public const int EventDescriptionMinLength = 10;
             public const int EventDescriptionMaxLength = 500;
 
-            public const int EventLocationMinLength = 20;
+            public const int EventLocationMinLength = 3;
             public const int EventLocationMaxLength = 200;
 
             public const int EventCityMinLength = 2;

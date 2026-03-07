@@ -1,0 +1,107 @@
+﻿@model EventDetailsViewModel
+
+<div class="container my-4">
+
+    <a asp-action="Index" class="btn btn-secondary mb-3">
+        ← Back to Events
+    </a>
+
+    <div class="card shadow-sm">
+
+        <!-- Image Hero Section -->
+        <div class="position-relative bg-light d-flex justify-content-center align-items-center"
+             style="max-height:500px; overflow:hidden;">
+
+            <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? Url.Content("~/images/no-image.png") : Model.ImageUrl)"
+                 class="img-fluid"
+                 alt="@Model.Title"
+                 style="max-height:500px; object-fit:contain;" />
+
+            <!-- Title Overlay -->
+            <div class="position-absolute bottom-0 start-0 w-100 text-white"
+                 style="background:rgba(0,0,0,0.55);">
+
+                <div class="p-3 text-center">
+                    <h1 class="fw-bold mb-0">@Model.Title</h1>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-body text-center">
+
+            <p class="fs-5 mt-3">
+                @Model.Description
+            </p>
+
+            <div class="mt-4 fs-5">
+
+                <p class="mb-2">
+                    <strong>Date:</strong> @Model.Date.ToString("dd MMM yyyy HH:mm")
+                </p>
+
+                <p class="mb-2">
+                    <strong>Location:</strong> @Model.Location, @Model.City, @Model.Country
+                </p>
+
+                <p class="mb-2">
+                    <strong>Category:</strong> @Model.CategoryName
+                </p>
+
+                <p class="mb-2">
+                    <strong>Participants:</strong> @Model.ParticipantsCount
+                </p>
+
+                <p class="mb-3">
+                    <strong>Organizer:</strong> @Model.CreatorFullName
+                </p>
+
+            </div>
+
+            <div class="mt-4 d-flex justify-content-center gap-3">
+
+                @if (Model.IsCreator)
+                {
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-warning px-4">
+                        Edit
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-danger px-4">
+                        Delete
+                    </a>
+                }
+                else
+                {
+                    @if (Model.HasJoined)
+                    {
+                        <a asp-controller="EventParticipation"
+                           asp-action="Leave"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-danger px-4">
+                            Leave Event
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="EventParticipation"
+                           asp-action="Join"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-primary px-4">
+                            Join Event
+                        </a>
+                    }
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

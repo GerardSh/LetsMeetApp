@@ -4,8 +4,11 @@ using static LetsMeetApp.GCommon.ValidationConstants.Event;
 
 namespace LetsMeetApp.Web.ViewModels.Event
 {
-    public class EventCreateInputModel
+    public class EventEditInputModel
     {
+        [Required]
+        public Guid Id { get; set; }
+
         [Required]
         [MinLength(EventTitleMinLength)]
         [MaxLength(EventTitleMaxLength)]

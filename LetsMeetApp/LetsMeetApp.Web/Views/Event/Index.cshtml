@@ -4,7 +4,12 @@
     ViewData["Title"] = "Events Dashboard";
 }
 
-<h2 class="text-center fw-bold mb-4">My Events</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-center fw-bold mb-0">Events I'm Attending</h2>
+    <a asp-controller="Event" asp-action="PastEvents" class="btn btn-outline-secondary">
+        View Past Events
+    </a>
+</div>
 
 @if (!Model.MyEvents.Any())
 {
@@ -56,7 +61,7 @@ else
                                 @ev.Date.ToString("dd MMM yyyy HH:mm")
                             </small><br />
                             <small class="text-muted">
-                                @ev.City, @ev.Country
+                                @ev.Location, @ev.City, @ev.Country
                             </small><br />
                             <small class="text-muted">
                                 Category: @ev.CategoryName
@@ -96,10 +101,6 @@ else
                             }
                             else
                             {
-                                <button class="btn btn-warning flex-fill" disabled>
-                                    Edit
-                                </button>
-
                                 <a asp-controller="EventParticipation"
                                    asp-action="Leave"
                                    asp-route-id="@ev.Id"
@@ -193,7 +194,7 @@ else
                                 @ev.Date.ToString("dd MMM yyyy HH:mm")
                             </small><br />
                             <small class="text-muted">
-                                @ev.City, @ev.Country
+                                @ev.Location, @ev.City, @ev.Country
                             </small><br />
                             <small class="text-muted">
                                 Category: @ev.CategoryName
@@ -214,10 +215,6 @@ else
                                class="btn btn-primary flex-fill">
                                 View
                             </a>
-
-                            <button class="btn btn-warning flex-fill" disabled>
-                                Edit
-                            </button>
 
                             <a asp-controller="EventParticipation"
                                asp-action="Join"

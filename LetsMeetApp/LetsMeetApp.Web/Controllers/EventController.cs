@@ -30,6 +30,17 @@ namespace LetsMeetApp.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> PastEvents()
+        {
+            string userId = GetUserId()!;
+            var userIdGuid = Guid.Parse(userId);
+
+            var pastEvents = await eventService.GetPastEventsAsync(userId);
+
+            return View(pastEvents);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             try
@@ -64,11 +75,17 @@ namespace LetsMeetApp.Web.Controllers
                     return View(model);
                 }
 
-                bool addResult = await eventService.CreateEventAsync(userId, model);
+                var result = await eventService.CreateEventAsync(userId, model);
 
-                if (!addResult)
+                if (!result.Success)
                 {
-                    ModelState.AddModelError(string.Empty, "Fatal error occured while creating the event, please check all fields and if the date is not in the past!");
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(error.Key, error.Value);
+                    }
+
+                    model.Categories = await categoryService.GetCategoriesDropdownAsync(userId);
+
                     return View(model);
                 }
 
@@ -82,9 +99,82 @@ namespace LetsMeetApp.Web.Controllers
             }
         }
 
-        public IActionResult Details(Guid id)
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
         {
-            return View();
+            string userId = GetUserId()!;
+
+            var model = await eventService.GetEventDetailsAsync(userId, id);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            try
+            {
+                string userId = GetUserId()!;
+
+                var model = await eventService.GetEventForEditAsync(userId, id);
+
+                if (model == null)
+                {
+                    return Unauthorized();
+                }
+
+                model.Categories = await categoryService.GetCategoriesDropdownAsync(userId);
+
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EventEditInputModel model)
+        {
+            try
+            {
+                string userId = GetUserId()!;
+
+                if (!ModelState.IsValid)
+                {
+                    model.Categories = await categoryService.GetCategoriesDropdownAsync(userId);
+
+                    return View(model);
+                }
+
+                var result = await eventService.EditEventAsync(userId, model);
+
+                if (!result.Success)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(error.Key, error.Value);
+                    }
+
+                    model.Categories = await categoryService.GetCategoriesDropdownAsync(userId);
+
+                    return View(model);
+                }
+
+                return RedirectToAction(nameof(Details), new { id = model.Id });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

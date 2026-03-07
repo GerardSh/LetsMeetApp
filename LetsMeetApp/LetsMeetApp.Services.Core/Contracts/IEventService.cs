@@ -1,5 +1,6 @@
 ﻿using LetsMeetApp.Data.Models;
 using LetsMeetApp.Web.ViewModels.Event;
+using LetsMeetApp.Web.ViewModels.Shared;
 
 namespace LetsMeetApp.Services.Core.Contracts
 {
@@ -7,7 +8,15 @@ namespace LetsMeetApp.Services.Core.Contracts
     {
         Task<EventIndexViewModel> GetIndexEventsAsync(string userId, EventsFilterViewModel filter);
 
-        Task<bool> CreateEventAsync(string userId, EventCreateInputModel inputModel);
+        Task<List<EventViewModel>> GetPastEventsAsync(string userId);
+
+        Task<OperationResult> CreateEventAsync(string userId, EventCreateInputModel inputModel);
+
+        Task<EventDetailsViewModel> GetEventDetailsAsync(string userId, Guid id);
+
+        Task<EventEditInputModel?> GetEventForEditAsync(string userId, Guid id);
+
+        Task<OperationResult> EditEventAsync(string userId, EventEditInputModel inputModel);
 
         Task<Event?> GetByIdAsync(Guid id);
     }

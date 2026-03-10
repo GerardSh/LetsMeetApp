@@ -181,16 +181,27 @@ namespace LetsMeetApp.Services.Core
             {
                 var @event = new Event
                 {
-                    Title = inputModel.Title,
-                    Description = inputModel.Description,
+                    Title = inputModel.Title.Trim(),
+                    Description = inputModel.Description.Trim(),
                     Date = inputModel.Date,
-                    Location = inputModel.Location,
-                    City = inputModel.City,
-                    Country = inputModel.Country,
+                    Location = inputModel.Location.Trim(),
+                    City = inputModel.City.Trim(),
+                    Country = inputModel.Country.Trim(),
                     ImageUrl = inputModel.ImageUrl,
                     CreatorId = userIdGuid,
                     CategoryId = inputModel.CategoryId
                 };
+
+                var participation = new EventParticipation
+                {
+                    Event = @event,
+                    UserId = userIdGuid,
+                    JoinedAt = DateTime.Now
+                };
+
+                @event.Participants.Add(participation);
+                user!.CreatedEvents.Add(@event);
+                user!.JoinedEvents.Add(participation);
 
                 await dbContext.Events.AddAsync(@event);
                 await dbContext.SaveChangesAsync();
@@ -206,58 +217,59 @@ namespace LetsMeetApp.Services.Core
         {
             var userIdGuid = Guid.Parse(currentUserId);
 
-            var ev = await dbContext.Events
+            var @event = await dbContext.Events
                 .Include(e => e.Category)
                 .Include(e => e.Creator)
                 .Include(e => e.Participants)
                 .FirstOrDefaultAsync(e => e.Id == eventId);
 
-            if (ev == null) return null;
+            if (@event == null) return null;
 
-            var @event = new EventDetailsViewModel
+            var model = new EventDetailsViewModel
             {
-                Id = ev.Id,
-                Title = ev.Title,
-                Description = ev.Description,
-                Date = ev.Date,
-                Location = ev.Location,
-                City = ev.City,
-                Country = ev.Country,
-                ImageUrl = ev.ImageUrl,
-                CategoryName = ev.Category.Name,
-                CreatorFullName = $"{ev.Creator.FirstName} {ev.Creator.LastName}",
-                ParticipantsCount = ev.Participants.Count,
-                IsCreator = ev.CreatorId == userIdGuid,
-                HasJoined = ev.Participants.Any(p => p.UserId == userIdGuid)
+                Id = @event.Id,
+                Title = @event.Title,
+                Description = @event.Description,
+                Date = @event.Date,
+                Location = @event.Location,
+                City = @event.City,
+                Country = @event.Country,
+                ImageUrl = @event.ImageUrl,
+                CategoryName = @event.Category.Name,
+                CreatorFullName = $"{@event.Creator.FirstName} {@event.Creator.LastName}",
+                ParticipantsCount = @event.Participants.Count,
+                IsCreator = @event.CreatorId == userIdGuid,
+                HasJoined = @event.Participants.Any(p => p.UserId == userIdGuid)
             };
 
-            return @event;
+            return model;
         }
 
         public async Task<EventEditInputModel?> GetEventForEditAsync(string userId, Guid id)
         {
             var userIdGuid = Guid.Parse(userId);
 
-            var ev = await dbContext.Events
+            var @event = await dbContext.Events
                 .FirstOrDefaultAsync(e => e.Id == id);
 
-            if (ev == null || ev.CreatorId != userIdGuid)
+            if (@event == null || @event.CreatorId != userIdGuid || @event.Date <= DateTime.Now)
             {
                 return null;
             }
 
             var model = new EventEditInputModel
             {
-                Id = ev.Id,
-                Title = ev.Title,
-                Description = ev.Description,
-                Date = ev.Date,
-                Location = ev.Location,
-                City = ev.City,
-                Country = ev.Country,
-                ImageUrl = ev.ImageUrl,
-                CategoryId = ev.CategoryId
+                Id = @event.Id,
+                Title = @event.Title,
+                Description = @event.Description,
+                Date = @event.Date,
+                Location = @event.Location,
+                City = @event.City,
+                Country = @event.Country,
+                ImageUrl = @event.ImageUrl,
+                CategoryId = @event.CategoryId
             };
+
 
             return model;
         }
@@ -271,9 +283,9 @@ namespace LetsMeetApp.Services.Core
             var @event = await dbContext.Events
                 .FirstOrDefaultAsync(e => e.Id == inputModel.Id);
 
-            if (@event == null || @event.CreatorId != userIdGuid)
+            if (@event == null || @event.CreatorId != userIdGuid || @event.Date <= DateTime.Now)
             {
-                result.Errors.Add("", EventNotFoundOrNoPermission);
+                result.Message = EventNotFoundNoPermissionOrExpired;
                 return result;
             }
 
@@ -319,6 +331,38 @@ namespace LetsMeetApp.Services.Core
             }
 
             return result;
+        }
+
+        public async Task<EventDeleteInputModel?> GetEventForDeletingAsync(string userId, Guid? eventId)
+        {
+            EventDeleteInputModel? deleteModel = null;
+
+            var userIdGuid = Guid.Parse(userId);
+
+            if (eventId != null)
+            {
+                Event? @event = await dbContext
+                    .Events
+                    .Include(e => e.Creator)
+                    .Include(e => e.Participants)
+                    .AsNoTracking()
+                    .SingleOrDefaultAsync(r => r.Id == eventId);
+
+                if (@event != null &&
+                   @event.CreatorId == userIdGuid)
+                {
+                    deleteModel = new EventDeleteInputModel()
+                    {
+                        Id = @event.Id,
+                        Title = @event.Title,
+                        Creator = @event.Creator.FirstName + " " + @event.Creator.LastName,
+                        CreatorId = @event.CreatorId,
+                        Participants = @event.Participants.Count
+                    };
+                }
+            }
+
+            return deleteModel;
         }
     }
 }

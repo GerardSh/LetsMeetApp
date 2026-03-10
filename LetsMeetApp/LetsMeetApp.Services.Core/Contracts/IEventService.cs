@@ -18,6 +18,8 @@ namespace LetsMeetApp.Services.Core.Contracts
 
         Task<OperationResult> EditEventAsync(string userId, EventEditInputModel inputModel);
 
+        Task<EventDeleteInputModel?> GetEventForDeletingAsync(string userId, Guid? eventId);
+
         Task<Event?> GetByIdAsync(Guid id);
     }
 }

@@ -1,0 +1,34 @@
+﻿@model LetsMeetApp.Web.ViewModels.Event.EventDeleteInputModel
+
+@{
+    ViewData["Title"] = "Delete Event";
+}
+
+<div class="container my-5">
+    <h2 class="text-center fw-bold mb-4 text-danger">Confirm Delete Event</h2>
+
+    <div class="card shadow-sm p-4">
+        <h4>@Model.Title</h4>
+        <p>
+            <strong>Author:</strong> @Model.Creator<br />
+            <strong>Participants:</strong> @Model.Participants
+        </p>
+        <p class="text-danger fw-bold">
+            Warning: This action is irreversible. Once deleted, the event and all participations will be removed.
+        </p>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="d-flex justify-content-between mt-4">
+                <a asp-action="Index" class="btn btn-secondary">
+                    Cancel
+                </a>
+
+                <button type="submit" class="btn btn-danger">
+                    Delete Event
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -2,7 +2,8 @@
 
 using LetsMeetApp.Services.Core.Contracts;
 using LetsMeetApp.Web.ViewModels.Event;
-using Microsoft.EntityFrameworkCore;
+
+using static LetsMeetApp.GCommon.ErrorMessages.Event;
 
 namespace LetsMeetApp.Web.Controllers
 {
@@ -125,7 +126,7 @@ namespace LetsMeetApp.Web.Controllers
 
                 if (model == null)
                 {
-                    return Unauthorized();
+                    return RedirectToAction(nameof(Index));
                 }
 
                 model.Categories = await categoryService.GetCategoriesDropdownAsync(userId);
@@ -157,6 +158,11 @@ namespace LetsMeetApp.Web.Controllers
 
                 if (!result.Success)
                 {
+                    if (result.Message == EventNotFoundNoPermissionOrExpired)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError(error.Key, error.Value);
@@ -173,6 +179,30 @@ namespace LetsMeetApp.Web.Controllers
             {
                 Console.WriteLine(e.Message);
 
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                string userId = GetUserId()!;
+
+                EventDeleteInputModel? deleteModel = await eventService
+                    .GetEventForDeletingAsync(userId!, id);
+
+                if (deleteModel == null)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return View(deleteModel);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
                 return RedirectToAction(nameof(Index));
             }
         }

@@ -245,12 +245,12 @@ namespace LetsMeetApp.Services.Core
             return model;
         }
 
-        public async Task<EventEditInputModel?> GetEventForEditAsync(string userId, Guid id)
+        public async Task<EventEditInputModel?> GetEventForEditAsync(string userId, Guid eventId)
         {
             var userIdGuid = Guid.Parse(userId);
 
             var @event = await dbContext.Events
-                .FirstOrDefaultAsync(e => e.Id == id);
+                .FirstOrDefaultAsync(e => e.Id == eventId);
 
             if (@event == null || @event.CreatorId != userIdGuid || @event.Date <= DateTime.Now)
             {
@@ -333,9 +333,9 @@ namespace LetsMeetApp.Services.Core
             return result;
         }
 
-        public async Task<EventDeleteInputModel?> GetEventForDeletingAsync(string userId, Guid? eventId)
+        public async Task<EventDeleteViewModel?> GetEventForDeletingAsync(string userId, Guid? eventId)
         {
-            EventDeleteInputModel? deleteModel = null;
+            EventDeleteViewModel? deleteModel = null;
 
             var userIdGuid = Guid.Parse(userId);
 
@@ -351,7 +351,7 @@ namespace LetsMeetApp.Services.Core
                 if (@event != null &&
                    @event.CreatorId == userIdGuid)
                 {
-                    deleteModel = new EventDeleteInputModel()
+                    deleteModel = new EventDeleteViewModel()
                     {
                         Id = @event.Id,
                         Title = @event.Title,
@@ -363,6 +363,33 @@ namespace LetsMeetApp.Services.Core
             }
 
             return deleteModel;
+        }
+
+        public async Task<OperationResult> DeleteEventAsync(string userId, Guid eventId)
+        {
+            var result = new OperationResult();
+
+            var userIdGuid = Guid.Parse(userId);
+
+            Event? @event = await dbContext.Events
+                .FirstOrDefaultAsync(e =>
+                    e.Id == eventId &&
+                    e.CreatorId == userIdGuid &&
+                    e.Date > DateTime.Now);
+
+            if (@event == null)
+            {
+                result.Message = EventNotFoundNoPermissionOrExpired;
+                return result;
+            }
+
+            @event.IsDeleted = true;
+            @event.DeletedOn = DateTime.Now;
+
+            await dbContext.SaveChangesAsync();
+
+            result.Success = true;
+            return result;
         }
     }
 }

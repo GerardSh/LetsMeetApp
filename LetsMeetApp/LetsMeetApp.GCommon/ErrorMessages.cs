@@ -9,6 +9,7 @@
             public const string PastEvent = "Event date must be at least one hour ahead of now.";
             public const string ImageUrlNotValid = "Image URL must be a valid http/https address.";
             public const string EventNotFoundNoPermissionOrExpired = "Event not found, has expired or you dont have permission to edit it.";
+            public const string DoNotModify = "Please do not modify the page!";
         }
     }
 }

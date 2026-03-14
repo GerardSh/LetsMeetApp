@@ -34,26 +34,26 @@ namespace LetsMeetApp.Data.Configuration
                   .HasMaxLength(ApplicationUserAvatarUrlMaxLength);
         }
 
-        public static void Seed(ModelBuilder builder)
-        {
-            var admin = new ApplicationUser
-            {
-                Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                FirstName = "System",
-                LastName = "Admin",
-                UserName = "admin@letsmeet.com",
-                NormalizedUserName = "ADMIN@LETSMEET.COM",
-                Email = "admin@letsmeet.com",
-                NormalizedEmail = "ADMIN@LETSMEET.COM",
-                EmailConfirmed = true,
-                City = "Sofia",
-                Country = "Bulgaria",
-                BirthDate = new DateTime(1990, 1, 1),
-                SecurityStamp = "11111111-1111-1111-1111-111111111111",
-                PasswordHash = "AQAAAAIAAYagAAAAEFSEH0Cf94mKE/j8ZHPDb7oaLF2tLT+53BFCrbqqNjzC2TlUeU7KKkLH5eFdWVbcEA=="
-            };
+        //public static void Seed(ModelBuilder builder)
+        //{
+        //    var admin = new ApplicationUser
+        //    {
+        //        Id = new Guid("11111111-1111-1111-1111-111111111111"),
+        //        FirstName = "System",
+        //        LastName = "Admin",
+        //        UserName = "admin@letsmeet.com",
+        //        NormalizedUserName = "ADMIN@LETSMEET.COM",
+        //        Email = "admin@letsmeet.com",
+        //        NormalizedEmail = "ADMIN@LETSMEET.COM",
+        //        EmailConfirmed = true,
+        //        City = "Sofia",
+        //        Country = "Bulgaria",
+        //        BirthDate = new DateTime(1990, 1, 1),
+        //        SecurityStamp = "11111111-1111-1111-1111-111111111111",
+        //        PasswordHash = "AQAAAAIAAYagAAAAEFSEH0Cf94mKE/j8ZHPDb7oaLF2tLT+53BFCrbqqNjzC2TlUeU7KKkLH5eFdWVbcEA=="
+        //    };
 
-            builder.Entity<ApplicationUser>().HasData(admin);
-        }
+        //    builder.Entity<ApplicationUser>().HasData(admin);
+        //}
     }
 }

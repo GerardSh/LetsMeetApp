@@ -190,7 +190,7 @@ namespace LetsMeetApp.Web.Controllers
             {
                 string userId = GetUserId()!;
 
-                EventDeleteInputModel? deleteModel = await eventService
+                EventDeleteViewModel? deleteModel = await eventService
                     .GetEventForDeletingAsync(userId!, id);
 
                 if (deleteModel == null)
@@ -206,5 +206,34 @@ namespace LetsMeetApp.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmDelete(EventDeleteInputModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                string userId = GetUserId()!;
+
+                var result = await eventService.DeleteEventAsync(userId, model.Id);
+
+                if (!result.Success)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
     }
 }

@@ -26,10 +26,10 @@ namespace LetsMeetApp.Data
 
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            ApplicationUserConfiguration.Seed(builder);
-            CategoryConfiguration.Seed(builder);
-            EventConfiguration.Seed(builder);
-            EventParticipationConfiguration.Seed(builder);
+            //ApplicationUserConfiguration.Seed(builder);
+            //CategoryConfiguration.Seed(builder);
+            //EventConfiguration.Seed(builder);
+            //EventParticipationConfiguration.Seed(builder);
         }
     }
 }

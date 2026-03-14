@@ -36,6 +36,10 @@ namespace LetsMeetApp.Data.Models
         public Guid CategoryId { get; set; }
         public Category Category { get; set; } = null!;
 
+        public bool IsDeleted { get; set; }
+
+        public DateTime? DeletedOn { get; set; }
+
         public ICollection<EventParticipation> Participants { get; set; }
             = new HashSet<EventParticipation>();
     }

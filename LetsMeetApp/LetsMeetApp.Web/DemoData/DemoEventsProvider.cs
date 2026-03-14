@@ -6,7 +6,7 @@ namespace LetsMeetApp.Web.DemoData
     {
         public static IEnumerable<EventViewModel> GetDemoEvents()
         {
-            var DemoEvents = new List<EventViewModel>
+            var demoEvents = new List<EventViewModel>
             {
                 new EventViewModel
                 {
@@ -36,7 +36,7 @@ namespace LetsMeetApp.Web.DemoData
                 }
             };
 
-            return DemoEvents;
+            return demoEvents;
         }
     }
 }

@@ -5,12 +5,13 @@ using LetsMeetApp.Data.Models;
 using LetsMeetApp.Web.Infrastructure.Extensions;
 using LetsMeetApp.Services.Core.Contracts;
 using LetsMeetApp.Services.Core;
+using LetsMeetApp.Web.DemoData;
 
 namespace LetsMeetApp.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,14 @@ namespace LetsMeetApp.Web
 
             var app = builder.Build();
 
+            app.ApplyMigrations(app.Logger);
+
+            // Seed demo events on first run
+            using (var scope = app.Services.CreateScope())
+            {
+                await DemoSeeder.SeedDemoData(scope.ServiceProvider);
+            }
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -52,8 +61,6 @@ namespace LetsMeetApp.Web
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            app.ApplyMigrations(app.Logger);
 
             app.UseRouting();
 

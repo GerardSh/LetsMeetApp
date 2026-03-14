@@ -4,34 +4,53 @@
     ViewData["Title"] = "Events Dashboard";
 }
 
-<div class="mb-3">
+<div class="d-flex align-items-center justify-content-between mb-3">
+
     <a asp-controller="Event"
        asp-action="PastEvents"
-       class="btn btn-secondary mb-3">
+       class="btn btn-secondary">
         View Past Events
     </a>
 
-    <h2 class="text-center fw-bold mb-4">Events I'm Attending</h2>
+    <div class="flex-grow-1 d-flex justify-content-center">
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger text-center py-2 px-4 mb-0">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+        else if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success text-center py-2 px-4 mb-0">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+    </div>
+
 </div>
+
+<h2 class="text-center fw-bold mb-4">Events I'm Attending</h2>
 
 @if (!Model.MyEvents.Any())
 {
-    <div class="col-12 col-sm-6 col-lg-4 mb-3 d-flex">
-        <a asp-controller="Event"
-           asp-action="Create"
-           class="card h-100 w-100 shadow-sm text-decoration-none text-dark">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-6 col-lg-4 mb-3 d-flex">
+            <a asp-controller="Event"
+               asp-action="Create"
+               class="card h-100 w-100 shadow-sm text-decoration-none text-dark">
 
-            <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                <div class="card-body d-flex flex-column justify-content-center align-items-center">
 
-                <div class="display-1 fw-bold text-primary">
-                    +
+                    <div class="display-1 fw-bold text-primary">
+                        +
+                    </div>
+
+                    <h5 class="mt-3">Create Your Event</h5>
+
                 </div>
 
-                <h5 class="mt-3">Create Your first Event</h5>
-
-            </div>
-
-        </a>
+            </a>
+        </div>
     </div>
 }
 else
@@ -61,7 +80,7 @@ else
 
                         <p class="card-text">
                             <small class="text-muted">
-                                @ev.Date.ToString("dd MMM yyyy HH:mm")
+                                @ev.Date.ToLocalTime().ToString("dd MMM yyyy HH:mm")
                             </small><br />
                             <small class="text-muted">
                                 @ev.Location, @ev.City, @ev.Country
@@ -104,12 +123,17 @@ else
                             }
                             else
                             {
-                                <a asp-controller="EventParticipation"
-                                   asp-action="Leave"
-                                   asp-route-id="@ev.Id"
-                                   class="btn btn-danger flex-fill">
-                                    Leave
-                                </a>
+                                <form asp-controller="EventParticipation"
+                                      asp-action="Leave"
+                                      asp-route-id="@ev.Id"
+                                      method="post"
+                                      class="flex-fill">
+
+                                    <button type="submit" class="btn btn-danger w-100">
+                                        Leave
+                                    </button>
+
+                                </form>
                             }
 
                         </div>
@@ -153,7 +177,7 @@ else
             @(Model.Filter.EventsNearMe ? "checked" : "") />
 
             <label class="form-check-label">
-                Events Near Me
+                Events In My City
             </label>
         </div>
 
@@ -194,7 +218,7 @@ else
 
                         <p class="card-text">
                             <small class="text-muted">
-                                @ev.Date.ToString("dd MMM yyyy HH:mm")
+                                @ev.Date.ToLocalTime().ToString("dd MMM yyyy HH:mm")
                             </small><br />
                             <small class="text-muted">
                                 @ev.Location, @ev.City, @ev.Country
@@ -219,12 +243,17 @@ else
                                 View
                             </a>
 
-                            <a asp-controller="EventParticipation"
-                               asp-action="Join"
-                               asp-route-id="@ev.Id"
-                               class="btn btn-danger flex-fill">
-                                Join Event
-                            </a>
+                            <form asp-controller="EventParticipation"
+                                  asp-action="Join"
+                                  asp-route-id="@ev.Id"
+                                  method="post"
+                                  class="flex-fill">
+
+                                <button type="submit" class="btn btn-success w-100">
+                                    Join Event
+                                </button>
+
+                            </form>
 
                         </div>
 

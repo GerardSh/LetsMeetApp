@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using System.Globalization;
 
 using LetsMeetApp.Data;
 using LetsMeetApp.Data.Models;
@@ -8,34 +7,26 @@ using LetsMeetApp.Services.Core.Contracts;
 using LetsMeetApp.Web.ViewModels.Event;
 
 using static LetsMeetApp.GCommon.ErrorMessages.Event;
+using static LetsMeetApp.GCommon.SuccessMessages.Event;
 
 using LetsMeetApp.Web.ViewModels.Shared;
-
 
 namespace LetsMeetApp.Services.Core
 {
     public class EventService(LetsMeetDbContext dbContext,
         UserManager<ApplicationUser> userManager) : IEventService
     {
-        public async Task<Event?> GetByIdAsync(Guid id)
-        {
-            return await dbContext.Events
-                .Include(e => e.Category)
-                .Include(e => e.Creator)
-                .FirstOrDefaultAsync(e => e.Id == id);
-        }
-
         public async Task<EventIndexViewModel> GetIndexEventsAsync(string userId,
             EventsFilterViewModel filter)
         {
             var userIdGuid = Guid.Parse(userId);
 
-            var userEvent = await dbContext.Events
+            var userEvents = await dbContext.Events
                 .AsNoTracking()
                 .Where(e =>
                     (e.CreatorId == userIdGuid ||
                     e.Participants.Any(p => p.UserId == userIdGuid)) &&
-                    e.Date > DateTime.Now)
+                    e.Date > DateTime.UtcNow)
                 .Select(e => new EventViewModel
                 {
                     Id = e.Id,
@@ -59,7 +50,7 @@ namespace LetsMeetApp.Services.Core
                 .Where(e =>
                     e.CreatorId != userIdGuid &&
                     !e.Participants.Any(p => p.UserId == userIdGuid) &&
-                    e.Date > DateTime.Now);
+                    e.Date > DateTime.UtcNow);
 
             if (filter.EventsNearMe)
             {
@@ -104,7 +95,7 @@ namespace LetsMeetApp.Services.Core
 
             var indexModel = new EventIndexViewModel
             {
-                MyEvents = userEvent,
+                MyEvents = userEvents,
                 DiscoverEvents = discoverEvents,
                 Filter = filter
             };
@@ -143,14 +134,12 @@ namespace LetsMeetApp.Services.Core
             return userEvents;
         }
 
-        public async Task<OperationResult> CreateEventAsync(string userId, EventCreateInputModel inputModel)
+        public async Task<OperationResult> CreateEventAsync(string userId,
+            EventCreateInputModel inputModel)
         {
             var result = new OperationResult();
 
             var userIdGuid = Guid.Parse(userId);
-
-            ApplicationUser? user = await userManager
-                .FindByIdAsync(userId);
 
             Category? category = await dbContext
                 .Categories
@@ -161,9 +150,9 @@ namespace LetsMeetApp.Services.Core
                 result.Errors.Add(nameof(inputModel.CategoryId), CategoryDoesNotExist);
             }
 
-            DateTime minAllowedDate = DateTime.Now.AddMinutes(59);
+            DateTime minAllowedDateUtc = DateTime.UtcNow.AddMinutes(59);
 
-            if (inputModel.Date <= minAllowedDate)
+            if (inputModel.Date.ToUniversalTime() <= minAllowedDateUtc)
             {
                 result.Errors.Add(nameof(inputModel.Date), PastEvent);
             }
@@ -183,7 +172,7 @@ namespace LetsMeetApp.Services.Core
                 {
                     Title = inputModel.Title.Trim(),
                     Description = inputModel.Description.Trim(),
-                    Date = inputModel.Date,
+                    Date = inputModel.Date.ToUniversalTime(),
                     Location = inputModel.Location.Trim(),
                     City = inputModel.City.Trim(),
                     Country = inputModel.Country.Trim(),
@@ -196,16 +185,15 @@ namespace LetsMeetApp.Services.Core
                 {
                     Event = @event,
                     UserId = userIdGuid,
-                    JoinedAt = DateTime.Now
+                    JoinedAt = DateTime.UtcNow
                 };
 
                 @event.Participants.Add(participation);
-                user!.CreatedEvents.Add(@event);
-                user!.JoinedEvents.Add(participation);
 
                 await dbContext.Events.AddAsync(@event);
                 await dbContext.SaveChangesAsync();
 
+                result.Message = CreateSuccess;
                 result.Success = true;
             }
 
@@ -245,14 +233,15 @@ namespace LetsMeetApp.Services.Core
             return model;
         }
 
-        public async Task<EventEditInputModel?> GetEventForEditAsync(string userId, Guid eventId)
+        public async Task<EventEditInputModel?> GetEventForEditAsync(string userId,
+            Guid eventId)
         {
             var userIdGuid = Guid.Parse(userId);
 
             var @event = await dbContext.Events
                 .FirstOrDefaultAsync(e => e.Id == eventId);
 
-            if (@event == null || @event.CreatorId != userIdGuid || @event.Date <= DateTime.Now)
+            if (@event == null || @event.CreatorId != userIdGuid || @event.Date <= DateTime.UtcNow)
             {
                 return null;
             }
@@ -274,7 +263,8 @@ namespace LetsMeetApp.Services.Core
             return model;
         }
 
-        public async Task<OperationResult> EditEventAsync(string userId, EventEditInputModel inputModel)
+        public async Task<OperationResult> EditEventAsync(string userId,
+            EventEditInputModel inputModel)
         {
             var result = new OperationResult();
 
@@ -283,7 +273,7 @@ namespace LetsMeetApp.Services.Core
             var @event = await dbContext.Events
                 .FirstOrDefaultAsync(e => e.Id == inputModel.Id);
 
-            if (@event == null || @event.CreatorId != userIdGuid || @event.Date <= DateTime.Now)
+            if (@event == null || @event.CreatorId != userIdGuid || @event.Date <= DateTime.UtcNow)
             {
                 result.Message = EventNotFoundNoPermissionOrExpired;
                 return result;
@@ -298,9 +288,7 @@ namespace LetsMeetApp.Services.Core
                 result.Errors.Add(nameof(inputModel.CategoryId), CategoryDoesNotExist);
             }
 
-            DateTime minAllowedDate = DateTime.Now.AddMinutes(59);
-
-            if (inputModel.Date <= minAllowedDate)
+            if (inputModel.Date.ToUniversalTime() <= DateTime.UtcNow.AddMinutes(59))
             {
                 result.Errors.Add(nameof(inputModel.Date), PastEvent);
             }
@@ -318,7 +306,7 @@ namespace LetsMeetApp.Services.Core
             {
                 @event.Title = inputModel.Title;
                 @event.Description = inputModel.Description;
-                @event.Date = inputModel.Date;
+                @event.Date = inputModel.Date.ToUniversalTime();
                 @event.Location = inputModel.Location;
                 @event.City = inputModel.City;
                 @event.Country = inputModel.Country;
@@ -328,12 +316,14 @@ namespace LetsMeetApp.Services.Core
                 await dbContext.SaveChangesAsync();
 
                 result.Success = true;
+                result.Message = EditSuccess;
             }
 
             return result;
         }
 
-        public async Task<EventDeleteViewModel?> GetEventForDeletingAsync(string userId, Guid? eventId)
+        public async Task<EventDeleteViewModel?> GetEventForDeletingAsync(string userId,
+            Guid? eventId)
         {
             EventDeleteViewModel? deleteModel = null;
 
@@ -346,10 +336,10 @@ namespace LetsMeetApp.Services.Core
                     .Include(e => e.Creator)
                     .Include(e => e.Participants)
                     .AsNoTracking()
-                    .SingleOrDefaultAsync(r => r.Id == eventId);
-
-                if (@event != null &&
-                   @event.CreatorId == userIdGuid)
+                    .SingleOrDefaultAsync(e => e.Id == eventId &&
+                                          e.CreatorId == userIdGuid &&
+                                          e.Date > DateTime.UtcNow);
+                if (@event != null)
                 {
                     deleteModel = new EventDeleteViewModel()
                     {
@@ -365,7 +355,8 @@ namespace LetsMeetApp.Services.Core
             return deleteModel;
         }
 
-        public async Task<OperationResult> DeleteEventAsync(string userId, Guid eventId)
+        public async Task<OperationResult> DeleteEventAsync(string userId,
+            Guid eventId)
         {
             var result = new OperationResult();
 
@@ -375,7 +366,7 @@ namespace LetsMeetApp.Services.Core
                 .FirstOrDefaultAsync(e =>
                     e.Id == eventId &&
                     e.CreatorId == userIdGuid &&
-                    e.Date > DateTime.Now);
+                    e.Date > DateTime.UtcNow);
 
             if (@event == null)
             {
@@ -384,11 +375,12 @@ namespace LetsMeetApp.Services.Core
             }
 
             @event.IsDeleted = true;
-            @event.DeletedOn = DateTime.Now;
+            @event.DeletedOn = DateTime.UtcNow;
 
             await dbContext.SaveChangesAsync();
 
             result.Success = true;
+            result.Message = DeleteSuccess;
             return result;
         }
     }

@@ -11,5 +11,15 @@
             public const string EventNotFoundNoPermissionOrExpired = "Event not found, has expired or you dont have permission to edit it.";
             public const string DoNotModify = "Please do not modify the page!";
         }
+        public static class EventParticipation
+        {
+            public const string EventNotFound = "Event not found or deleted.";
+            public const string CreatorCantLeaveEvent = "Creator cannot leave their own event.";
+            public const string CreatorCantJoinEvent = "You are the creator of this event.";
+            public const string CantLeavePastEvent = "Cannot leave past events.";
+            public const string CantJoinPastEvent = "Cannot join past events.";
+            public const string NotParticipating = "You are not participating in this event.";
+            public const string AlreadyParticipating = "You are already participating in this event.";
+        }
     }
 }

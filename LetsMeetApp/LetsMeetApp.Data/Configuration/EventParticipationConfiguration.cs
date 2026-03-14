@@ -8,19 +8,19 @@ namespace LetsMeetApp.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<EventParticipation> entity)
         {
-            entity.HasKey(p => p.Id);
+            entity.HasKey(ep => ep.Id);
 
-            entity.HasOne(p => p.Event)
+            entity.HasOne(ep => ep.Event)
                   .WithMany(e => e.Participants)
-                  .HasForeignKey(p => p.EventId)
+                  .HasForeignKey(ep => ep.EventId)
                   .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne(p => p.User)
+            entity.HasOne(ep => ep.User)
                   .WithMany(u => u.JoinedEvents)
-                  .HasForeignKey(p => p.UserId)
+                  .HasForeignKey(ep => ep.UserId)
                   .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasIndex(p => new { p.EventId, p.UserId })
+            entity.HasIndex(ep => new { ep.EventId, ep.UserId })
                   .IsUnique();
 
             entity.HasQueryFilter(ep => !ep.Event.IsDeleted);

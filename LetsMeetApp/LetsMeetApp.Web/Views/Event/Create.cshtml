@@ -25,7 +25,7 @@
             <div class="mb-3">
                 <label asp-for="Date" class="form-label"></label>
                 <input asp-for="Date" type="datetime-local" class="form-control"
-                       value="@(Model.Date == default ? DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm") : Model.Date.ToString("yyyy-MM-ddTHH:mm"))" />
+                       value="@(Model.Date == default ? DateTime.Now.AddDays(1).ToString("yyyy-MM-ddTHH:mm") : Model.Date.ToLocalTime().ToString("yyyy-MM-ddTHH:mm"))" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
 

@@ -2,9 +2,22 @@
 
 <div class="container my-4">
 
-    <a asp-action="Index" class="btn btn-secondary mb-3">
-        ← Back to Events
-    </a>
+    <div class="d-flex align-items-center justify-content-between mb-3">
+
+        <a asp-action="Index" class="btn btn-secondary">
+            ← Back to Events
+        </a>
+
+        <div class="flex-grow-1 d-flex justify-content-center">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success text-center py-2 px-4 mb-0">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+        </div>
+
+    </div>
 
     <div class="card shadow-sm">
 
@@ -29,7 +42,6 @@
 
         </div>
 
-
         <div class="card-body text-center">
 
             <p class="fs-5 mt-3">
@@ -39,7 +51,7 @@
             <div class="mt-4 fs-5">
 
                 <p class="mb-2">
-                    <strong>Date:</strong> @Model.Date.ToString("dd MMM yyyy HH:mm")
+                    <strong>Date:</strong> @Model.Date.ToLocalTime().ToString("dd MMM yyyy HH:mm")
                 </p>
 
                 <p class="mb-2">
@@ -60,7 +72,7 @@
 
             </div>
 
-            @if (Model.Date > DateTime.Now)
+            @if (Model.Date > DateTime.UtcNow)
             {
                 <div class="mt-4 d-flex justify-content-center gap-3">
 
@@ -82,21 +94,33 @@
                     {
                         @if (Model.HasJoined)
                         {
-                            <a asp-controller="EventParticipation"
-                               asp-action="Leave"
-                               asp-route-id="@Model.Id"
-                               class="btn btn-danger px-4">
-                                Leave Event
-                            </a>
+                            <form asp-controller="EventParticipation"
+                                  asp-action="Leave"
+                                  asp-route-id="@Model.Id"
+                                  method="post"
+                                  class="d-inline">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit" class="btn btn-danger px-4">
+                                    Leave Event
+                                </button>
+                            </form>
                         }
                         else
                         {
-                            <a asp-controller="EventParticipation"
-                               asp-action="Join"
-                               asp-route-id="@Model.Id"
-                               class="btn btn-primary px-4">
-                                Join Event
-                            </a>
+                            <form asp-controller="EventParticipation"
+                                  asp-action="Join"
+                                  asp-route-id="@Model.Id"
+                                  method="post"
+                                  class="d-inline">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit" class="btn btn-success w-100">
+                                    Join Event
+                                </button>
+                            </form>
                         }
                     }
 

@@ -34,7 +34,6 @@ namespace LetsMeetApp.Web.Controllers
         public async Task<IActionResult> PastEvents()
         {
             string userId = GetUserId()!;
-            var userIdGuid = Guid.Parse(userId);
 
             var pastEvents = await eventService.GetPastEventsAsync(userId);
 
@@ -90,6 +89,7 @@ namespace LetsMeetApp.Web.Controllers
                     return View(model);
                 }
 
+                TempData["SuccessMessage"] = result.Message;
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e)
@@ -173,6 +173,7 @@ namespace LetsMeetApp.Web.Controllers
                     return View(model);
                 }
 
+                TempData["SuccessMessage"] = result.Message;
                 return RedirectToAction(nameof(Details), new { id = model.Id });
             }
             catch (Exception e)
@@ -226,6 +227,7 @@ namespace LetsMeetApp.Web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
+                TempData["SuccessMessage"] = result.Message;
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e)
@@ -234,6 +236,5 @@ namespace LetsMeetApp.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
     }
 }

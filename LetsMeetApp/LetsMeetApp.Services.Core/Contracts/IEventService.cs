@@ -21,7 +21,5 @@ namespace LetsMeetApp.Services.Core.Contracts
         Task<EventDeleteViewModel?> GetEventForDeletingAsync(string userId, Guid? eventId);
 
         Task<OperationResult> DeleteEventAsync(string userId, Guid eventId);
-
-        Task<Event?> GetByIdAsync(Guid id);
     }
 }

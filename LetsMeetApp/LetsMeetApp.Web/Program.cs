@@ -34,6 +34,7 @@ namespace LetsMeetApp.Web
 
             builder.Services.AddScoped<IEventService, EventService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IEventParticipationService, EventParticipationService>();
 
             builder.Services.AddControllersWithViews();
 

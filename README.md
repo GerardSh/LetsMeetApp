@@ -63,7 +63,7 @@ This allows users to easily find new events they can join.
 ## ⏱ Date Handling
 
 All event dates are stored in **UTC** to ensure consistent behavior across different environments.  
-Dates are converted to **local time in the UI** so users see the correct time for their location.
+Currently, dates are displayed based on the **server's local timezone**, not the user's local timezone.
 
 ---
 

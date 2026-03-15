@@ -82,10 +82,12 @@ Currently, dates are displayed based on the **server's local timezone**, not the
 
 The application follows a **service-based architecture** to separate concerns:
 
-- **Controllers** – Handle HTTP requests  
-- **Services** – Contain business logic  
-- **Data Layer** – Entity Framework Core models and configurations  
-- **ViewModels** – Used for data transfer between controllers and views  
+- **Controllers** – Handle HTTP requests and coordinate application flow  
+- **Services** – Contain business logic and interact with the data layer  
+- **Data Layer** – Entity Framework Core models and configurations (including database rules defined using Fluent API)  
+- **ViewModels** – Used for data transfer between controllers and views and for handling user input validation  
+- **DTOs** – Used when importing or transferring structured data between layers  
+- **Dependency Injection** – Applied across controllers and services to manage dependencies and promote testability
 
 ---
 

@@ -152,7 +152,7 @@ namespace LetsMeetApp.Data.Migrations
                         .IsUnique()
                         .HasFilter("[CreatorId] IS NOT NULL");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("LetsMeetApp.Data.Models.Event", b =>
@@ -221,7 +221,7 @@ namespace LetsMeetApp.Data.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("LetsMeetApp.Data.Models.EventParticipation", b =>
@@ -250,7 +250,7 @@ namespace LetsMeetApp.Data.Migrations
                     b.HasIndex("EventId", "UserId")
                         .IsUnique();
 
-                    b.ToTable("EventParticipations");
+                    b.ToTable("EventParticipations", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>

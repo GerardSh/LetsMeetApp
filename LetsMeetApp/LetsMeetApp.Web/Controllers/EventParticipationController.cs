@@ -1,8 +1,12 @@
-﻿using LetsMeetApp.Services.Core.Contracts;
-using LetsMeetApp.Web.Controllers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
-public class EventParticipationController(IEventParticipationService participationService)
+using LetsMeetApp.Services.Core.Contracts;
+using LetsMeetApp.Web.Controllers;
+
+using static LetsMeetApp.GCommon.ErrorMessages.Controllers;
+
+public class EventParticipationController(ILogger<EventParticipationController> logger, 
+   IEventParticipationService participationService)
     : BaseController
 {
     [HttpPost]
@@ -17,17 +21,18 @@ public class EventParticipationController(IEventParticipationService participati
             if (!result.Success)
             {
                 TempData["ErrorMessage"] = result.Message;
-                return RedirectToAction("Index", "Event");
             }
-
-            TempData["SuccessMessage"] = result.Message;
+            else
+            {
+                TempData["SuccessMessage"] = result.Message;
+            }
+         
             return RedirectToAction("Index", "Event");
 
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
-
+            logger.LogError(e, GeneralError);
             return RedirectToAction("Index", "Event");
         }
     }
@@ -44,16 +49,17 @@ public class EventParticipationController(IEventParticipationService participati
             if (!result.Success)
             {
                 TempData["ErrorMessage"] = result.Message;
-                return RedirectToAction("Index", "Event");
+            }
+            else
+            {
+                TempData["SuccessMessage"] = result.Message;
             }
 
-            TempData["SuccessMessage"] = result.Message;
             return RedirectToAction("Index", "Event");
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
-
+            logger.LogError(e, GeneralError);
             return RedirectToAction("Index", "Event");
         }
     }

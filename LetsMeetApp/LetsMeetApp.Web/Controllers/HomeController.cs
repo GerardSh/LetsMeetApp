@@ -5,16 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 using LetsMeetApp.Web.ViewModels.Shared;
 using LetsMeetApp.Web.DemoData;
 
+using static LetsMeetApp.GCommon.ErrorMessages.Controllers;
 
 namespace LetsMeetApp.Web.Controllers
 {
-    public class HomeController(ILogger<HomeController> logger,
-        LetsMeetApp.Services.Core.Contracts.IEventService eventService)
+    public class HomeController(ILogger<HomeController> logger)
         : BaseController
     {
 
         [AllowAnonymous]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             try
             {
@@ -27,7 +27,7 @@ namespace LetsMeetApp.Web.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                logger.LogError(e, GeneralError);
                 return RedirectToAction(nameof(Index));
             }
         }

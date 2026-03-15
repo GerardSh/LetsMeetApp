@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 using LetsMeetApp.Data;
 using LetsMeetApp.Data.Models;
@@ -13,8 +12,8 @@ using LetsMeetApp.Web.ViewModels.Shared;
 
 namespace LetsMeetApp.Services.Core
 {
-    public class EventService(LetsMeetDbContext dbContext,
-        UserManager<ApplicationUser> userManager) : IEventService
+    public class EventService(LetsMeetDbContext dbContext)
+        : IEventService
     {
         public async Task<EventIndexViewModel> GetIndexEventsAsync(string userId,
             EventsFilterViewModel filter)
@@ -112,7 +111,7 @@ namespace LetsMeetApp.Services.Core
                 .Where(e =>
                     (e.CreatorId == userIdGuid ||
                      e.Participants.Any(p => p.UserId == userIdGuid)) &&
-                     e.Date <= DateTime.Now)
+                     e.Date <= DateTime.UtcNow)
                 .Select(e => new EventViewModel
                 {
                     Id = e.Id,
@@ -145,7 +144,7 @@ namespace LetsMeetApp.Services.Core
                 .Categories
                 .FindAsync(inputModel.CategoryId);
 
-            if (category == null)
+            if (category == null || (category.CreatorId != null && category.CreatorId != userIdGuid))
             {
                 result.Errors.Add(nameof(inputModel.CategoryId), CategoryDoesNotExist);
             }
@@ -176,7 +175,7 @@ namespace LetsMeetApp.Services.Core
                     Location = inputModel.Location.Trim(),
                     City = inputModel.City.Trim(),
                     Country = inputModel.Country.Trim(),
-                    ImageUrl = inputModel.ImageUrl,
+                    ImageUrl = inputModel.ImageUrl?.Trim(),
                     CreatorId = userIdGuid,
                     CategoryId = inputModel.CategoryId
                 };
@@ -200,10 +199,10 @@ namespace LetsMeetApp.Services.Core
             return result;
         }
 
-        public async Task<EventDetailsViewModel?> GetEventDetailsAsync(string currentUserId,
+        public async Task<EventDetailsViewModel?> GetEventDetailsAsync(string userId,
             Guid eventId)
         {
-            var userIdGuid = Guid.Parse(currentUserId);
+            var userIdGuid = Guid.Parse(userId);
 
             var @event = await dbContext.Events
                 .Include(e => e.Category)
@@ -323,35 +322,32 @@ namespace LetsMeetApp.Services.Core
         }
 
         public async Task<EventDeleteViewModel?> GetEventForDeletingAsync(string userId,
-            Guid? eventId)
+            Guid eventId)
         {
-            EventDeleteViewModel? deleteModel = null;
-
             var userIdGuid = Guid.Parse(userId);
 
-            if (eventId != null)
-            {
-                Event? @event = await dbContext
-                    .Events
-                    .Include(e => e.Creator)
-                    .Include(e => e.Participants)
-                    .AsNoTracking()
-                    .SingleOrDefaultAsync(e => e.Id == eventId &&
-                                          e.CreatorId == userIdGuid &&
-                                          e.Date > DateTime.UtcNow);
-                if (@event != null)
-                {
-                    deleteModel = new EventDeleteViewModel()
-                    {
-                        Id = @event.Id,
-                        Title = @event.Title,
-                        Creator = @event.Creator.FirstName + " " + @event.Creator.LastName,
-                        CreatorId = @event.CreatorId,
-                        Participants = @event.Participants.Count
-                    };
-                }
-            }
+            if (eventId == Guid.Empty) return null;
 
+            Event? @event = await dbContext
+                .Events
+                .Include(e => e.Creator)
+                .Include(e => e.Participants)
+                .AsNoTracking()
+                .SingleOrDefaultAsync(e => e.Id == eventId &&
+                                      e.CreatorId == userIdGuid &&
+                                      e.Date > DateTime.UtcNow);
+
+            if (@event == null) return null;
+
+            EventDeleteViewModel deleteModel = new EventDeleteViewModel()
+                {
+                    Id = @event.Id,
+                    Title = @event.Title,
+                    Creator = @event.Creator.FirstName + " " + @event.Creator.LastName,
+                    CreatorId = @event.CreatorId,
+                    Participants = @event.Participants.Count
+                };
+            
             return deleteModel;
         }
 

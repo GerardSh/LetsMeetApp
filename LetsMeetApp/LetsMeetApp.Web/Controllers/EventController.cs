@@ -4,11 +4,13 @@ using LetsMeetApp.Services.Core.Contracts;
 using LetsMeetApp.Web.ViewModels.Event;
 
 using static LetsMeetApp.GCommon.ErrorMessages.Event;
+using static LetsMeetApp.GCommon.ErrorMessages.Controllers;
 
 namespace LetsMeetApp.Web.Controllers
 {
     public class EventController(IEventService eventService,
-        ICategoryService categoryService)
+        ICategoryService categoryService,
+        ILogger<EventController> logger)
         : BaseController
     {
         [HttpGet]
@@ -24,8 +26,7 @@ namespace LetsMeetApp.Web.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-
+                logger.LogError(e, GeneralError);
                 return RedirectToAction(nameof(Index), "Home");
             }
         }
@@ -56,7 +57,7 @@ namespace LetsMeetApp.Web.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                logger.LogError(e, GeneralError);
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -94,8 +95,7 @@ namespace LetsMeetApp.Web.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-
+                logger.LogError(e, GeneralError);
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -103,16 +103,24 @@ namespace LetsMeetApp.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            string userId = GetUserId()!;
-
-            var model = await eventService.GetEventDetailsAsync(userId, id);
-
-            if (model == null)
+            try
             {
-                return NotFound();
-            }
+                string userId = GetUserId()!;
 
-            return View(model);
+                var model = await eventService.GetEventDetailsAsync(userId, id);
+
+                if (model == null)
+                {
+                    return NotFound();
+                }
+
+                return View(model);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, GeneralError);
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpGet]
@@ -135,7 +143,7 @@ namespace LetsMeetApp.Web.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                logger.LogError(e, GeneralError);
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -178,8 +186,7 @@ namespace LetsMeetApp.Web.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-
+                logger.LogError(e, GeneralError);
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -203,7 +210,7 @@ namespace LetsMeetApp.Web.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                logger.LogError(e, GeneralError);
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -232,7 +239,7 @@ namespace LetsMeetApp.Web.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                logger.LogError(e, GeneralError);
                 return RedirectToAction(nameof(Index));
             }
         }

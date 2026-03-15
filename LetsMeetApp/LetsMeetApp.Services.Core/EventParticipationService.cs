@@ -31,7 +31,7 @@ public class EventParticipationService(LetsMeetDbContext dbContext) : IEventPart
             return result;
         }
 
-        if (@event.Date <= DateTime.Now)
+        if (@event.Date <= DateTime.UtcNow)
         {
             result.Message = CantJoinPastEvent;
             return result;
@@ -50,7 +50,7 @@ public class EventParticipationService(LetsMeetDbContext dbContext) : IEventPart
         {
             EventId = eventId,
             UserId = userIdGuid,
-            JoinedAt = DateTime.Now
+            JoinedAt = DateTime.UtcNow
         };
 
         await dbContext.EventParticipations.AddAsync(participation);
@@ -82,7 +82,7 @@ public class EventParticipationService(LetsMeetDbContext dbContext) : IEventPart
             return result;
         }
 
-        if (@event.Date <= DateTime.Now)
+        if (@event.Date <= DateTime.UtcNow)
         {
             result.Message = CantLeavePastEvent;
             return result;

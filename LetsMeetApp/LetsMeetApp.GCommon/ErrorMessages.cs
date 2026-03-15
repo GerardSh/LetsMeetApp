@@ -21,5 +21,10 @@
             public const string NotParticipating = "You are not participating in this event.";
             public const string AlreadyParticipating = "You are already participating in this event.";
         }
+
+        public static class Controllers
+        {
+            public const string GeneralError = "Unexpected error occurred.";
+        }
     }
 }

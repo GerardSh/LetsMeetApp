@@ -128,7 +128,7 @@ else
                                       asp-route-id="@ev.Id"
                                       method="post"
                                       class="flex-fill">
-
+                                    @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-danger w-100">
                                         Leave
                                     </button>
@@ -248,7 +248,7 @@ else
                                   asp-route-id="@ev.Id"
                                   method="post"
                                   class="flex-fill">
-
+                                @Html.AntiForgeryToken()
                                 <button type="submit" class="btn btn-success w-100">
                                     Join Event
                                 </button>

@@ -12,13 +12,13 @@ namespace LetsMeetApp.Services.Core.Contracts
 
         Task<OperationResult> CreateEventAsync(string userId, EventCreateInputModel inputModel);
 
-        Task<EventDetailsViewModel> GetEventDetailsAsync(string userId, Guid eventId);
+        Task<EventDetailsViewModel?> GetEventDetailsAsync(string userId, Guid eventId);
 
         Task<EventEditInputModel?> GetEventForEditAsync(string userId, Guid eventId);
 
         Task<OperationResult> EditEventAsync(string userId, EventEditInputModel inputModel);
 
-        Task<EventDeleteViewModel?> GetEventForDeletingAsync(string userId, Guid? eventId);
+        Task<EventDeleteViewModel?> GetEventForDeletingAsync(string userId, Guid eventId);
 
         Task<OperationResult> DeleteEventAsync(string userId, Guid eventId);
     }

@@ -1,4 +1,4 @@
-# LetsMeetApp# LetsMeetApp
+# LetsMeetApp
 
 **LetsMeetApp** is a web application built with **ASP.NET Core MVC** that allows users to create, discover, and join events.  
 The goal of the platform is to help people organize activities and connect with others who share similar interests.
@@ -14,6 +14,9 @@ You can log in with the pre-seeded admin account:
 **Email:** admin@letsmeet.com  
 **Password:** Admin123!
 
+> **Note:** The admin account comes with **two demo events** that are dynamically seeded in the system.  
+> These events appear in the **Events I'm Attending** section for the admin user.
+
 ---
 
 ## 📦 Application Overview
@@ -26,10 +29,34 @@ LetsMeetApp provides an easy way to organize and participate in events.
 - **Join Events** – Users can join events created by others  
 - **Leave Events** – Participants can leave events they previously joined  
 - **Event Participation** – Event creators are automatically added as participants  
-- **City Filtering** – Users can filter events based on the city  
+- **City Filtering** – Users can filter events in their city  
 - **Past Events Section** – Expired events are automatically moved to a separate section  
 - **Soft Delete** – Events are marked as deleted instead of being permanently removed  
 - **Event Ownership Rules** – Only the creator of an event can edit or delete it  
+
+---
+
+## 🗂 Event Sections
+
+The application separates events into two main sections:
+
+### **Events I'm Attending**
+
+This section contains:
+
+- Events the user has **created**
+- Events the user has **joined**
+
+Event creators are automatically added as participants, so their own events appear in this section as well.
+
+### **Discover Events**
+
+This section displays:
+
+- Events created by **other users**
+- Events the current user **is not participating in**
+
+This allows users to easily find new events they can join.
 
 ---
 
@@ -62,13 +89,26 @@ The application follows a **service-based architecture** to separate concerns:
 
 ---
 
-## 🚀 Main Functionalities
+## ⚙ Database Setup
 
-Users can:
+The application uses **SQL Server**.
 
-- Register and log in  
-- Create and manage their own events  
-- Join or leave events  
-- View events they are attending  
-- Browse past events  
-- Filter events by city  
+Before running the project, update the connection string in:
+
+appsettings.json
+
+Modify the `DefaultConnection` value so it points to your local SQL Server instance.
+
+Example:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=YOUR_SERVER_NAME;Database=LetsMeetAppDb;Trusted_Connection=True;TrustServerCertificate=True"
+}
+```
+
+## 🔄 Database Migrations
+
+- Database migrations are **applied automatically** when the application starts.  
+- If the database does not exist, it will be **created automatically**, and all migrations will be applied.  
+- This ensures the database schema is always **up to date** without requiring manual migration commands.  

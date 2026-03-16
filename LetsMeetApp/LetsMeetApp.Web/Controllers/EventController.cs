@@ -134,6 +134,7 @@ namespace LetsMeetApp.Web.Controllers
 
                 if (model == null)
                 {
+                    TempData["ErrorMessage"] = EventNotFoundNoPermissionOrExpired;
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -168,6 +169,7 @@ namespace LetsMeetApp.Web.Controllers
                 {
                     if (result.Message == EventNotFoundNoPermissionOrExpired)
                     {
+                        TempData["ErrorMessage"] = result.Message;
                         return RedirectToAction(nameof(Index));
                     }
 
@@ -203,6 +205,7 @@ namespace LetsMeetApp.Web.Controllers
 
                 if (deleteModel == null)
                 {
+                    TempData["ErrorMessage"] = EventNotFoundNoPermissionOrExpired;
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -231,10 +234,13 @@ namespace LetsMeetApp.Web.Controllers
 
                 if (!result.Success)
                 {
-                    return RedirectToAction(nameof(Index));
+                    TempData["ErrorMessage"] = result.Message;
                 }
-
-                TempData["SuccessMessage"] = result.Message;
+                else
+                {
+                    TempData["SuccessMessage"] = result.Message;
+                }
+    
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception e)

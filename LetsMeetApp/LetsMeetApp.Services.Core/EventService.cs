@@ -4,11 +4,10 @@ using LetsMeetApp.Data;
 using LetsMeetApp.Data.Models;
 using LetsMeetApp.Services.Core.Contracts;
 using LetsMeetApp.Web.ViewModels.Event;
+using LetsMeetApp.Web.ViewModels.Shared;
 
 using static LetsMeetApp.GCommon.ErrorMessages.Event;
 using static LetsMeetApp.GCommon.SuccessMessages.Event;
-
-using LetsMeetApp.Web.ViewModels.Shared;
 
 namespace LetsMeetApp.Services.Core
 {
@@ -127,7 +126,7 @@ namespace LetsMeetApp.Services.Core
                     ParticipantsCount = e.Participants.Count,
                     IsCreator = e.CreatorId == userIdGuid
                 })
-                .OrderBy(e => e.Date)
+                .OrderByDescending(e => e.Date)
                 .ToListAsync();
 
             return userEvents;
@@ -282,7 +281,7 @@ namespace LetsMeetApp.Services.Core
                 .Categories
                 .FindAsync(inputModel.CategoryId);
 
-            if (category == null)
+            if (category == null || (category.CreatorId != null && category.CreatorId != userIdGuid))
             {
                 result.Errors.Add(nameof(inputModel.CategoryId), CategoryDoesNotExist);
             }

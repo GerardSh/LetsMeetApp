@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-using static LetsMeetApp.GCommon.ValidationConstants.Event;
-
-namespace LetsMeetApp.Web.ViewModels.Event
+﻿namespace LetsMeetApp.Web.ViewModels.Event
 {
     public class EventDeleteViewModel
     {

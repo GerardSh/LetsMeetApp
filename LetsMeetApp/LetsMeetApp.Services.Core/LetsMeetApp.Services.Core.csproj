@@ -9,7 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\LetsMeetApp.Data.Models\LetsMeetApp.Data.Models.csproj" />
     <ProjectReference Include="..\LetsMeetApp.Data\LetsMeetApp.Data.csproj" />
-    <ProjectReference Include="..\LetsMeetApp.ViewModels\LetsMeetApp.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\LetsMeetApp.Web.ViewModels\LetsMeetApp.Web.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LetsMeetApp.Services.Core\LetsMeetApp.Services.Core.csproj" />
-    <ProjectReference Include="..\LetsMeetApp.ViewModels\LetsMeetApp.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\LetsMeetApp.Web.ViewModels\LetsMeetApp.Web.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>
